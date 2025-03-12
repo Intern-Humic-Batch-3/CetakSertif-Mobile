@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
+import 'package:humic_mobile/app/routes/app_pages.dart';
 import '../controllers/login_page_controller.dart';
 
 class LoginPageView extends GetView<LoginPageController> {
@@ -164,11 +165,14 @@ class LoginPageView extends GetView<LoginPageController> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text(
-                        'Masuk',
-                        style: AppTypography.bodyLargeSemiBold.copyWith(
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
+                      child: GestureDetector(
+                        onTap: () => Get.toNamed(Routes.HOME_PAGE),
+                        child: Text(
+                          'Masuk',
+                          style: AppTypography.bodyLargeSemiBold.copyWith(
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
+                          ),
                         ),
                       ),
                     ),

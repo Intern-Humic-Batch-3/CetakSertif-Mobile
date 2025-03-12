@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:humic_mobile/app/routes/app_pages.dart';
 
 class LoginPageController extends GetxController {
   //TODO: Implement LoginPageController
@@ -28,6 +29,9 @@ class LoginPageController extends GetxController {
   }
 
   void login() {
-    // Implement login logic here
+    // Add your login logic here
+    // For now, we'll just navigate to home page
+    Get.offAllNamed(
+        Routes.HOME_PAGE); // Using offAllNamed to remove previous routes
   }
 }
