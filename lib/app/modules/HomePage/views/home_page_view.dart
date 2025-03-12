@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
+import 'package:dotted_border/dotted_border.dart';
 import '../controllers/home_page_controller.dart';
 
 class HomePageView extends GetView<HomePageController> {
@@ -20,17 +21,53 @@ class HomePageView extends GetView<HomePageController> {
           height: 40,
         ),
         actions: [
-          Builder(
-            // Pakai Builder supaya bisa akses Scaffold.of(context)
-            builder: (context) => IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: AppColors.textPrimary,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer(); // Buka sidebar
-              },
+          PopupMenuButton<String>(
+            icon: Icon(
+              Icons.menu,
+              color: AppColors.textPrimary,
             ),
+            offset: Offset(0, 40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            color: Colors.grey[900],
+            onSelected: (value) {
+              if (value == 'riwayat') {
+                // Navigate to Riwayat Sertifikat page
+              } else if (value == 'logout') {
+                Get.offAllNamed(Routes.LOGIN_PAGE); // Navigate to login
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem<String>(
+                  value: 'riwayat',
+                  child: Row(
+                    children: [
+                      Icon(Icons.history, color: Colors.white),
+                      SizedBox(width: 8),
+                      Text(
+                        'Riwayat Sertifikat',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<String>(
+                  value: 'logout',
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout, color: Colors.red),
+                      SizedBox(width: 8),
+                      Text(
+                        'Logout',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ),
+              ];
+            },
           ),
         ],
         bottom: PreferredSize(
@@ -41,112 +78,57 @@ class HomePageView extends GetView<HomePageController> {
           ),
         ),
       ),
-      endDrawer: Drawer(
-        width: 250,
-        child: Column(
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Center(
-                child: Image.asset(
-                  "assets/images/LogoHumic.png",
-                  height: 100,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.history,
-                color: AppColors.textPrimary,
-              ),
-              title: Text(
-                'Riwayat Sertifikat',
-                style: AppTypography.bodyLargeRegular.copyWith(
-                  color: AppColors.textPrimary,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              onTap: () {
-                Get.back(); // Tutup drawer
-                // Arahkan ke halaman riwayat jika ada
-              },
-            ),
-            const Spacer(), // Dorong logout ke bawah
-            Divider(color: AppColors.disabled),
-            ListTile(
-              leading: Icon(
-                Icons.logout,
-                color: AppColors.error,
-              ),
-              title: Text(
-                'Logout',
-                style: AppTypography.bodyLargeRegular.copyWith(
-                  color: AppColors.error,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              onTap: () {
-                Get.back(); // Tutup drawer
-                Get.offAllNamed(Routes.LOGIN_PAGE); // Pindah ke login
-              },
-            ),
-            const SizedBox(height: 5),
-          ],
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
             const SizedBox(height: 98), // 🔑 Ini jarak dari AppBar ke konten
             // Certificate Upload Container
-            Container(
-              width: double.infinity,
-              height: 400,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.textTertiary,
-                  width: 1,
+            DottedBorder(
+              color: AppColors.textPrimary,
+              strokeWidth: 5,
+              dashPattern: [4, 4], // Length of dashes and gaps
+              borderType: BorderType.RRect,
+              radius: Radius.circular(8),
+              child: Container(
+                width: double.infinity,
+                height: 400,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBackground,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.image_outlined,
+                        color: AppColors.primary,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Silahkan Masukkan Sertifikat Template di Sini!',
+                      style: AppTypography.bodyMediumBold.copyWith(
+                        color: AppColors.textPrimary,
+                        fontFamily: 'Poppins',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Hanya Mendukung JPG dan PNG',
+                      style: AppTypography.bodySmallRegular.copyWith(
+                        color: AppColors.textSecondary,
+                        fontFamily: 'Poppins',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.cardBackground,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.image_outlined,
-                      color: AppColors.primary,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Silahkan Masukkan Sertifikat Template di Sini!',
-                    style: AppTypography.bodyMediumBold.copyWith(
-                      color: AppColors.textPrimary,
-                      fontFamily: 'Poppins',
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Hanya Mendukung JPG dan PNG',
-                    style: AppTypography.bodySmallRegular.copyWith(
-                      color: AppColors.textSecondary,
-                      fontFamily: 'Poppins',
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
               ),
             ),
             const SizedBox(height: 24), // Jarak sebelum tombol

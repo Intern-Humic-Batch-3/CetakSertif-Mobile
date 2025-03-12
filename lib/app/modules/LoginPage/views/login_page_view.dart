@@ -166,7 +166,6 @@ class LoginPageView extends GetView<LoginPageController> {
                         ),
                       ),
                       child: GestureDetector(
-                        onTap: () => Get.toNamed(Routes.HOME_PAGE),
                         child: Text(
                           'Masuk',
                           style: AppTypography.bodyLargeSemiBold.copyWith(
