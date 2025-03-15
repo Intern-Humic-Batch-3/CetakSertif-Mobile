@@ -7,178 +7,155 @@ import '../controllers/login_page_controller.dart';
 
 class LoginPageView extends GetView<LoginPageController> {
   const LoginPageView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.putih,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Logo
-                  Center(
-                    child: Image.asset(
-                      "assets/images/LogoHumic.png",
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Header Section
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                color: AppColors.primary,
+                child: Column(
+                  children: [
+                    Text(
+                      "Website Cetak Sertifikat - HUMIC ENGINEERING",
+                      style: AppTypography.bodyLargeBold.copyWith(
+                        color: AppColors.putih,
+                        fontFamily: 'Poppins',
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 29),
-
-                  // Welcome Text
-                  Center(
-                    child: Text(
-                      "Selamat Datang Kembali!",
+                    const SizedBox(height: 50),
+                    Container(
+                      width: 185,
+                      height: 185,
+                      decoration: BoxDecoration(
+                          color: AppColors.putih, shape: BoxShape.circle),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Image.asset("assets/images/LogoHumic.png"),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "Selamat Datang!",
                       style: AppTypography.h5Bold.copyWith(
-                        color: AppColors.textPrimary,
+                        color: AppColors.putih,
                         fontFamily: 'Poppins',
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Subtitle
-                  Center(
-                    child: Text(
-                      'Masuk untuk melakukan cetak sertifikat sesuai\ndengan kebutuhan anda',
+                    const SizedBox(height: 8),
+                    Text(
+                      "Masuk untuk melakukan cetak sertifikat sesuai dengan kebutuhan anda",
                       style: AppTypography.bodyMediumRegular.copyWith(
-                        color: AppColors.textSecondary,
+                        color: AppColors.putih,
                         fontFamily: 'Poppins',
                       ),
                       textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 51),
-
-                  // Email Label
-                  Text(
-                    'Email',
-                    style: AppTypography.bodyLargeBold.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: AppTypography.bold,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Email Field
-                  TextField(
-                    style: AppTypography.bodyLargeRegular.copyWith(
-                      fontFamily: 'Poppins',
-                    ),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: AppColors
-                          .background, // Light primary color for background
-                      hintText: "Masukkan email anda",
-                      hintStyle: AppTypography.bodyLargeRegular.copyWith(
-                        color: AppColors.textTertiary,
-                        fontFamily: 'Poppins',
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: AppColors.disabled)),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: AppColors.primary),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Password Label
-                  Text(
-                    'Password',
-                    style: AppTypography.bodyLargeBold.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: AppTypography.bold,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Password Field
-                  Obx(() => TextField(
-                        obscureText: controller.isPasswordHidden.value,
-                        style: AppTypography.bodyLargeRegular.copyWith(
-                          fontFamily: 'Poppins',
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColors
-                              .background, // Light primary color for background
-                          hintText: "Masukkan password anda",
-                          hintStyle: AppTypography.bodyLargeRegular.copyWith(
-                            color: AppColors.textTertiary,
-                            fontFamily: 'Poppins',
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              controller.isPasswordHidden.value
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                              color: AppColors.textTertiary,
-                            ),
-                            onPressed: () =>
-                                controller.togglePasswordVisibility(),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.disabled),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.primary),
-                          ),
-                        ),
-                      )),
-                  const SizedBox(height: 43),
-
-                  // Login Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => controller.login(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: GestureDetector(
-                        child: Text(
-                          'Masuk',
-                          style: AppTypography.bodyLargeSemiBold.copyWith(
-                            color: Colors.white,
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              const SizedBox(height: 40),
+
+              // Login Form
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Email Field
+                    Text("Email",
+                        style: AppTypography.bodyLargeBold
+                            .copyWith(color: AppColors.textPrimary)),
+                    const SizedBox(height: 8),
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: "Masukkan email anda",
+                        fillColor: AppColors.putih,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: AppColors.primary),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: AppColors.textPrimary),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: AppColors.primary),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Password Field
+                    Text("Password",
+                        style: AppTypography.bodyLargeBold
+                            .copyWith(color: AppColors.textPrimary)),
+                    const SizedBox(height: 8),
+                    Obx(() => TextField(
+                          obscureText: controller.isPasswordHidden.value,
+                          decoration: InputDecoration(
+                            hintText: "Masukkan password anda",
+                            fillColor: AppColors.putih,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: AppColors.primary),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide:
+                                  BorderSide(color: AppColors.textPrimary),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: AppColors.primary),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                controller.isPasswordHidden.value
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                color: AppColors.textTertiary,
+                              ),
+                              onPressed: () =>
+                                  controller.togglePasswordVisibility(),
+                            ),
+                          ),
+                        )),
+                    const SizedBox(height: 32),
+
+                    // Login Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => controller.login(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text("Masuk",
+                            style: AppTypography.bodyLargeSemiBold
+                                .copyWith(color: AppColors.light)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
+            ],
           ),
         ),
       ),

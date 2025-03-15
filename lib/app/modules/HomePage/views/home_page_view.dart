@@ -4,6 +4,8 @@ import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
+import 'package:humic_mobile/app/widgets/custom_submit_button.dart';
 import '../controllers/home_page_controller.dart';
 
 class HomePageView extends GetView<HomePageController> {
@@ -13,71 +15,7 @@ class HomePageView extends GetView<HomePageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Image.asset(
-          "assets/images/LogoHumic.png",
-          height: 40,
-        ),
-        actions: [
-          PopupMenuButton<String>(
-            icon: Icon(
-              Icons.menu,
-              color: AppColors.textPrimary,
-            ),
-            offset: Offset(0, 40),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            color: Colors.grey[900],
-            onSelected: (value) {
-              if (value == 'riwayat') {
-                // Navigate to Riwayat Sertifikat page
-              } else if (value == 'logout') {
-                Get.offAllNamed(Routes.LOGIN_PAGE); // Navigate to login
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: 'riwayat',
-                  child: Row(
-                    children: [
-                      Icon(Icons.history, color: Colors.white),
-                      SizedBox(width: 8),
-                      Text(
-                        'Riwayat Sertifikat',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'logout',
-                  child: Row(
-                    children: [
-                      Icon(Icons.logout, color: Colors.red),
-                      SizedBox(width: 8),
-                      Text(
-                        'Logout',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ],
-                  ),
-                ),
-              ];
-            },
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(10.0),
-          child: Divider(
-            color: AppColors.primary,
-            height: 1,
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(title: "Input Data"),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -92,7 +30,7 @@ class HomePageView extends GetView<HomePageController> {
               radius: Radius.circular(8),
               child: Container(
                 width: double.infinity,
-                height: 400,
+                height: 460,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -132,28 +70,10 @@ class HomePageView extends GetView<HomePageController> {
               ),
             ),
             const SizedBox(height: 24), // Jarak sebelum tombol
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Aksi submit
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  'Submit',
-                  style: AppTypography.bodyLargeSemiBold.copyWith(
-                    color: Colors.white,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
+            CustomSubmitButton(
+              onPressed: () {
+                Get.toNamed(Routes.INPUT_PAGE);
+              },
             ),
           ],
         ),
