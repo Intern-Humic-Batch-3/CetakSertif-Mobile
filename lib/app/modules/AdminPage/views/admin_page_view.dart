@@ -4,6 +4,7 @@ import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
+import 'package:humic_mobile/app/widgets/custom_drawer.dart';
 import 'package:humic_mobile/app/widgets/custom_submit_button.dart';
 
 import '../controllers/admin_page_controller.dart';
