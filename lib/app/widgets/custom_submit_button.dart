@@ -4,9 +4,13 @@ import 'package:humic_mobile/app/constants/typography.dart';
 
 class CustomSubmitButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final String text;
 
-  const CustomSubmitButton({Key? key, required this.onPressed})
-      : super(key: key);
+  const CustomSubmitButton({
+    Key? key,
+    required this.onPressed,
+    this.text = "Submit",
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ class CustomSubmitButton extends StatelessWidget {
           ),
         ),
         child: Text(
-          'Submit',
+          text,
           style: AppTypography.bodyLargeSemiBold.copyWith(
             color: Colors.white,
             fontFamily: 'Poppins',

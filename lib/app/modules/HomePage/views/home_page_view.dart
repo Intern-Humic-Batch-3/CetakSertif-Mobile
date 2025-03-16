@@ -15,22 +15,22 @@ class HomePageView extends GetView<HomePageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(title: "Input Data"),
+      appBar: CustomAppBar(),
+      // drawer: CustomDrawer(isAdmin: false,),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            const SizedBox(height: 98), // 🔑 Ini jarak dari AppBar ke konten
-            // Certificate Upload Container
+            const SizedBox(height: 98),
             DottedBorder(
               color: AppColors.textPrimary,
               strokeWidth: 5,
-              dashPattern: [4, 4], // Length of dashes and gaps
+              dashPattern: [26, 23.5],
               borderType: BorderType.RRect,
               radius: Radius.circular(8),
               child: Container(
                 width: double.infinity,
-                height: 460,
+                height: 505,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

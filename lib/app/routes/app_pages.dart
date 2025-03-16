@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/AdminPage/bindings/admin_page_binding.dart';
+import '../modules/AdminPage/views/admin_page_view.dart';
 import '../modules/HomePage/bindings/home_page_binding.dart';
 import '../modules/HomePage/views/home_page_view.dart';
 import '../modules/LoginPage/bindings/login_page_binding.dart';
@@ -29,6 +31,11 @@ class AppPages {
       name: _Paths.INPUT_PAGE,
       page: () => const InputPageView(),
       binding: InputPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMIN_PAGE,
+      page: () => const AdminPageView(),
+      binding: AdminPageBinding(),
     ),
   ];
 }
