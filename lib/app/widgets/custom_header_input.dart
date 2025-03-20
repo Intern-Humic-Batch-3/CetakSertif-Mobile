@@ -57,8 +57,10 @@ class CustomInputHeader extends StatelessWidget {
 void _showInfoDialog(BuildContext context) {
   showDialog(
     context: context,
+    // barrierColor: const Color.fromARGB(170, 0, 0, 0),
     builder: (BuildContext context) {
       return AlertDialog(
+        backgroundColor: AppColors.putih,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
@@ -72,7 +74,7 @@ void _showInfoDialog(BuildContext context) {
               child: Center(
                 child: Text(
                   'Buat Sertifikat dengan Mudah!',
-                  style: AppTypography.bodyLargeBold,
+                  style: AppTypography.bodyLargeSemiBold,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -137,7 +139,9 @@ Widget _buildStep(String number, String text) {
         Expanded(
           child: Text(
             text,
-            style: AppTypography.bodyMediumRegular,
+            style: AppTypography.bodyLargeRegular.copyWith(
+              fontSize: 12,
+            ),
           ),
         ),
       ],

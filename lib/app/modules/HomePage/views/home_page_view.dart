@@ -32,7 +32,7 @@ class HomePageView extends GetView<HomePageController> {
               backRoute: Routes.ADMIN_PAGE,
             ),
 
-            const SizedBox(height: 70),
+            const SizedBox(height: 30),
             DottedBorder(
               color: AppColors.textPrimary,
               strokeWidth: 5,
