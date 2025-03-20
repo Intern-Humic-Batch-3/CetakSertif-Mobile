@@ -71,17 +71,17 @@ class CustomDrawer extends StatelessWidget {
                   _buildDrawerItem(
                     imagePath: "assets/icons/sertif-icon.png",
                     title: "Riwayat Sertifikat",
-                    onTap: () => Get.toNamed(Routes.HOME_PAGE),
+                    onTap: () => Get.offAllNamed(Routes.ADMIN_PAGE),
                   ),
-                  _buildDrawerItem(
-                    imagePath: "assets/icons/user-icon.png",
-                    title: "Daftar Pengguna",
-                    onTap: () => Get.toNamed(Routes.HOME_PAGE),
-                  ),
+                  // _buildDrawerItem(
+                  //   imagePath: "assets/icons/user-icon.png",
+                  //   title: "Daftar Pengguna",
+                  //   onTap: () => Get.toNamed(Routes.HOME_PAGE),
+                  // ),
                   _buildDrawerItem(
                     imagePath: "assets/icons/file-icon.png",
                     title: "Template Humic",
-                    onTap: () => Get.toNamed(Routes.HOME_PAGE),
+                    onTap: () => Get.toNamed(Routes.TEMPLATE_HUMIC),
                   ),
                 ],
               ),

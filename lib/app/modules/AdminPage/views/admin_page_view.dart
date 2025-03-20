@@ -50,9 +50,7 @@ class AdminPageView extends GetView<AdminPageController> {
             const SizedBox(height: 32),
             CustomSubmitButton(
               text: "Tambah",
-              onPressed: () {
-                Get.toNamed(Routes.INPUT_PAGE);
-              },
+              onPressed: () => controller.Tambah(),
             ),
           ],
         ),

@@ -7,6 +7,7 @@ abstract class Routes {
   static const HOME_PAGE = _Paths.HOME_PAGE;
   static const INPUT_PAGE = _Paths.INPUT_PAGE;
   static const ADMIN_PAGE = _Paths.ADMIN_PAGE;
+  static const TEMPLATE_HUMIC = _Paths.TEMPLATE_HUMIC;
 }
 
 abstract class _Paths {
@@ -15,4 +16,5 @@ abstract class _Paths {
   static const HOME_PAGE = '/home-page';
   static const INPUT_PAGE = '/input-page';
   static const ADMIN_PAGE = '/admin-page';
+  static const TEMPLATE_HUMIC = '/template-humic';
 }

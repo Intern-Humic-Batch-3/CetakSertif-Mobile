@@ -8,6 +8,8 @@ import '../modules/LoginPage/bindings/login_page_binding.dart';
 import '../modules/LoginPage/views/login_page_view.dart';
 import '../modules/inputPage/bindings/input_page_binding.dart';
 import '../modules/inputPage/views/input_page_view.dart';
+import '../modules/template_humic/bindings/template_humic_binding.dart';
+import '../modules/template_humic/views/template_humic_view.dart';
 
 part 'app_routes.dart';
 
@@ -36,6 +38,11 @@ class AppPages {
       name: _Paths.ADMIN_PAGE,
       page: () => const AdminPageView(),
       binding: AdminPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.TEMPLATE_HUMIC,
+      page: () => const TemplateHumicView(),
+      binding: TemplateHumicBinding(),
     ),
   ];
 }

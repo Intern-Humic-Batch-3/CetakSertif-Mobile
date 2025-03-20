@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:humic_mobile/app/widgets/custom_drawer.dart';
+import 'package:humic_mobile/app/widgets/custom_header_input.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
-
 import '../controllers/input_page_controller.dart';
 import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
 import 'package:humic_mobile/app/constants/colors.dart';
@@ -26,22 +26,8 @@ class InputPageView extends GetView<InputPageController> {
         padding: const EdgeInsets.all(24.0),
         child: ListView(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () => Get.back(),
-                ),
-                Text('Input Data', style: AppTypography.bodyLargeSemiBold),
-                IconButton(
-                  icon: const Icon(Icons.info_outline),
-                  onPressed: () {
-                    _showInfoDialog(context);
-                  },
-                ),
-              ],
-            ),
+            const CustomInputHeader(showBackButton: true),
+
             const SizedBox(height: 24),
 
             // // Input Data Sertifikat Title
@@ -152,293 +138,205 @@ class InputPageView extends GetView<InputPageController> {
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.grey),
+              borderSide: BorderSide(color: AppColors.neutral400),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: AppColors.neutral400),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: AppColors.primary, width: 1),
             ),
           ),
         ),
       ],
     );
   }
+}
 
-  // File Picker khusus TTD (tanpa "Chosen File")
-  Widget _buildTTDFilePickerField(String label, RxString fileName,
-      {List<String>? allowedExtensions}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTypography.bodyMediumBold),
-        const SizedBox(height: 8),
-        GestureDetector(
-          onTap: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles(
-              type: FileType.custom,
-              allowedExtensions: allowedExtensions ?? ['png', 'jpg'],
-            );
-            if (result != null && result.files.isNotEmpty) {
-              fileName.value = result.files.single.name; // Set nama file
-            }
-          },
-          child: Obx(() => Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    if (fileName.value.isNotEmpty) ...[
-                      const Icon(Icons.insert_drive_file, color: Colors.green),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          fileName.value,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.bodyMediumRegular,
-                        ),
-                      ),
-                    ] else
-                      Text('chosse file',
-                          style: AppTypography.bodyMediumRegular
-                              .copyWith(color: Colors.grey[600])),
-                  ],
-                ),
-              )),
-        ),
-      ],
-    );
-  }
-
-  // File Picker Field
-  Widget _buildFilePickerField(String label, RxString fileName,
-      {List<String>? allowedExtensions}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTypography.bodyMediumBold),
-        const SizedBox(height: 8),
-        GestureDetector(
-          onTap: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles(
-              type: FileType.custom,
-              allowedExtensions:
-                  allowedExtensions ?? ['jpg', 'png', 'pdf', 'xlsx'],
-            );
-            if (result != null && result.files.isNotEmpty) {
-              fileName.value = result.files.single.name; // Set nama file
-            }
-          },
-          child: Obx(
-            () => Container(
+// File Picker khusus TTD (tanpa "Chosen File")
+Widget _buildTTDFilePickerField(String label, RxString fileName,
+    {List<String>? allowedExtensions}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(label, style: AppTypography.bodyMediumBold),
+      const SizedBox(height: 8),
+      GestureDetector(
+        onTap: () async {
+          FilePickerResult? result = await FilePicker.platform.pickFiles(
+            type: FileType.custom,
+            allowedExtensions: allowedExtensions ?? ['png', 'jpg'],
+          );
+          if (result != null && result.files.isNotEmpty) {
+            fileName.value = result.files.single.name; // Set nama file
+          }
+        },
+        child: Obx(() => Container(
               height: 48,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  // Bagian Kiri: "Chosen File"
-                  Container(
-                    width: 110, // Lebar bagian kiri bisa disesuaikan
-                    decoration: const BoxDecoration(
-                        color: Color(0xFFF1F1F1), // Abu-abu muda
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Chosen File',
-                      style: AppTypography.bodyMediumRegular
-                          .copyWith(color: Colors.grey[600]),
-                    ),
-                  ),
-                  Container(
-                    width: 1,
-                    color: Colors.grey,
-                  ),
-                  // Bagian Kanan: Nama File
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      color: Colors.white,
-                      alignment: Alignment.centerLeft,
-                      child: fileName.value.isNotEmpty
-                          ? Text(
-                              fileName.value,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.bodyMediumRegular,
-                            )
-                          : Text(
-                              'Tidak ada file',
-                              style: AppTypography.bodyMediumRegular
-                                  .copyWith(color: Colors.grey[500]),
-                            ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Date Picker Field
-  Widget _buildDateField(
-      String hintText, BuildContext context, RxString dateValue) {
-    return Obx(() => GestureDetector(
-          onTap: () async {
-            DateTime? pickedDate = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              builder: (context, child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: ColorScheme.light(
-                      primary: AppColors.primary,
-                      onPrimary:
-                          AppColors.textTertiary, // Warna teks tanggal dipilih
-                      onSurface: Colors.black, // Warna teks default
-                    ),
-                    textButtonTheme: TextButtonThemeData(
-                      style: TextButton.styleFrom(
-                        foregroundColor:
-                            AppColors.primary, // Warna tombol (CANCEL/OK)
+                  if (fileName.value.isNotEmpty) ...[
+                    const Icon(Icons.insert_drive_file, color: Colors.green),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        fileName.value,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.bodyMediumRegular,
                       ),
                     ),
-                  ),
-                  child: child!,
-                );
-              },
-            );
-            if (pickedDate != null) {
-              // Format tanggal
-              String formattedDate =
-                  DateFormat('dd-MM-yyyy').format(pickedDate);
-              dateValue.value = formattedDate; // Simpan ke controller
-            }
-          },
-          child: Container(
+                  ] else
+                    Text('chosse file',
+                        style: AppTypography.bodyMediumRegular
+                            .copyWith(color: Colors.grey[600])),
+                ],
+              ),
+            )),
+      ),
+    ],
+  );
+}
+
+// File Picker Field
+Widget _buildFilePickerField(String label, RxString fileName,
+    {List<String>? allowedExtensions}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(label, style: AppTypography.bodyMediumBold),
+      const SizedBox(height: 8),
+      GestureDetector(
+        onTap: () async {
+          FilePickerResult? result = await FilePicker.platform.pickFiles(
+            type: FileType.custom,
+            allowedExtensions:
+                allowedExtensions ?? ['jpg', 'png', 'pdf', 'xlsx'],
+          );
+          if (result != null && result.files.isNotEmpty) {
+            fileName.value = result.files.single.name; // Set nama file
+          }
+        },
+        child: Obx(
+          () => Container(
             height: 48,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            alignment: Alignment.centerLeft,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  dateValue.value.isEmpty ? hintText : dateValue.value,
-                  style: AppTypography.bodyMediumRegular.copyWith(
-                    color: dateValue.value.isEmpty
-                        ? Colors.grey[600]
-                        : Colors.black,
+                // Bagian Kiri: "Chosen File"
+                Container(
+                  width: 110, // Lebar bagian kiri bisa disesuaikan
+                  decoration: const BoxDecoration(
+                      color: Color(0xFFF1F1F1), // Abu-abu muda
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Chosen File',
+                    style: AppTypography.bodyMediumRegular
+                        .copyWith(color: Colors.grey[600]),
                   ),
                 ),
-                const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
+                Container(
+                  width: 1,
+                  color: Colors.grey,
+                ),
+                // Bagian Kanan: Nama File
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    color: Colors.white,
+                    alignment: Alignment.centerLeft,
+                    child: fileName.value.isNotEmpty
+                        ? Text(
+                            fileName.value,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.bodyMediumRegular,
+                          )
+                        : Text(
+                            'Tidak ada file',
+                            style: AppTypography.bodyMediumRegular
+                                .copyWith(color: Colors.grey[500]),
+                          ),
+                  ),
+                ),
               ],
             ),
           ),
-        ));
-  }
+        ),
+      ),
+    ],
+  );
+}
 
-  // Fungsi untuk menampilkan Pop Up Dialog
-  void _showInfoDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          contentPadding: const EdgeInsets.all(24),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Center(
-                  child: Text(
-                    'Buat Sertifikat dengan Mudah!',
-                    style: AppTypography.bodyLargeBold,
+// Date Picker Field
+Widget _buildDateField(
+    String hintText, BuildContext context, RxString dateValue) {
+  return Obx(() => GestureDetector(
+        onTap: () async {
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: AppColors.primary,
+                    onPrimary:
+                        AppColors.textTertiary, // Warna teks tanggal dipilih
+                    onSurface: Colors.black, // Warna teks default
                   ),
-                ),
-              ),
-              const SizedBox(height: 28),
-              _buildStep(
-                  '1', 'Unggah Template – Pilih desain sertifikatmu (JPG/PNG)'),
-              _buildStep('2',
-                  'Tambahkan Data Peserta – Upload file Excel (.XLSX, max 1MB)'),
-              _buildStep('3',
-                  'Lengkapi Detail Acara – Isi nama kegiatan, tanggal, dan penyelenggara.'),
-              _buildStep('4',
-                  'Tambahkan Tanda Tangan – Unggah file tanda tangan yang diperlukan.'),
-              _buildStep(
-                  '5', 'Klik Submit – Biarkan sistem memproses sertifikatmu.'),
-              const SizedBox(height: 24),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary, // Warna button
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor:
+                          AppColors.primary, // Warna tombol (CANCEL/OK)
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Menutup dialog
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    child: Text('Tutup', style: TextStyle(color: Colors.white)),
-                  ),
                 ),
-              )
+                child: child!,
+              );
+            },
+          );
+          if (pickedDate != null) {
+            // Format tanggal
+            String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+            dateValue.value = formattedDate; // Simpan ke controller
+          }
+        },
+        child: Container(
+          height: 48,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                dateValue.value.isEmpty ? hintText : dateValue.value,
+                style: AppTypography.bodyMediumRegular.copyWith(
+                  color:
+                      dateValue.value.isEmpty ? Colors.grey[600] : Colors.black,
+                ),
+              ),
+              const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
             ],
           ),
-        );
-      },
-    );
-  }
-
-// Widget Step List dengan Icon Angka
-  Widget _buildStep(String number, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Circle Number
-          Container(
-            width: 24,
-            height: 24,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              number,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Description
-          Expanded(
-            child: Text(
-              text,
-              style: AppTypography.bodyMediumRegular,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ));
 }

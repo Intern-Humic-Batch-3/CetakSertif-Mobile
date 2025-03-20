@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 
-class AdminPageController extends GetxController {
-  //TODO: Implement AdminPageController
+class TemplateHumicController extends GetxController {
+  //TODO: Implement TemplateHumicController
 
   final count = 0.obs;
   @override
@@ -22,7 +22,11 @@ class AdminPageController extends GetxController {
 
   void increment() => count.value++;
 
-  void Tambah() {
-    Get.offNamed(Routes.HOME_PAGE);
+  void Gunakan() {
+    Get.offNamed(Routes.INPUT_PAGE);
+  }
+
+  void kembali() {
+    Get.offNamed(Routes.ADMIN_PAGE);
   }
 }

@@ -5,6 +5,8 @@ import 'package:humic_mobile/app/constants/typography.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
+import 'package:humic_mobile/app/widgets/custom_drawer.dart';
+import 'package:humic_mobile/app/widgets/custom_header_input.dart';
 import 'package:humic_mobile/app/widgets/custom_submit_button.dart';
 import '../controllers/home_page_controller.dart';
 
@@ -16,16 +18,25 @@ class HomePageView extends GetView<HomePageController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(),
-      // drawer: CustomDrawer(isAdmin: false,),
+      drawer: CustomDrawer(
+        isAdmin: true,
+        userEmail: "Daniel Admin",
+        userName: "Danieladmin@mail.com",
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(29.0),
         child: Column(
           children: [
-            const SizedBox(height: 98),
+            const CustomInputHeader(
+              showBackButton: true,
+              backRoute: Routes.ADMIN_PAGE,
+            ),
+
+            const SizedBox(height: 70),
             DottedBorder(
               color: AppColors.textPrimary,
               strokeWidth: 5,
-              dashPattern: [26, 23.5],
+              dashPattern: [26, 23],
               borderType: BorderType.RRect,
               radius: Radius.circular(8),
               child: Container(
