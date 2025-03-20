@@ -24,7 +24,7 @@ class AppTheme {
         onError: Colors.white,
         brightness: Brightness.light,
       ),
-      scaffoldBackgroundColor: AppColors.background,
+      scaffoldBackgroundColor: Colors.white,
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,

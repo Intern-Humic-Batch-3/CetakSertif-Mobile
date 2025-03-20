@@ -29,7 +29,7 @@ class AdminPageView extends GetView<AdminPageController> {
           children: [
             Image.asset(
               "assets/icons/admin-awal.png",
-              width: 80,
+              width: 100,
             ),
             const SizedBox(height: 24),
             Text(
