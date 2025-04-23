@@ -19,8 +19,8 @@ class AdminPageView extends GetView<AdminPageController> {
       appBar: CustomAppBar(),
       drawer: CustomDrawer(
         isAdmin: true,
-        userEmail: "Daniel Admin",
-        userName: "Danieladmin@mail.com",
+        userEmail: controller.userEmail, // Menampilkan email pengguna
+        userName: controller.userName, // Menampilkan nama lengkap pengguna
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),

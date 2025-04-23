@@ -46,7 +46,7 @@ class CustomDrawer extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    userEmail,
+                    userName, // Menampilkan nama lengkap
                     style: AppTypography.bodyLargeSemiBold.copyWith(
                       color: Colors.white,
                     ),
@@ -55,7 +55,7 @@ class CustomDrawer extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    userName,
+                    userEmail, // Menampilkan email pengguna
                     style: AppTypography.bodySmallRegular.copyWith(
                       color: Colors.white70,
                     ),
@@ -73,11 +73,6 @@ class CustomDrawer extends StatelessWidget {
                     title: "Riwayat Sertifikat",
                     onTap: () => Get.offAllNamed(Routes.ADMIN_PAGE),
                   ),
-                  // _buildDrawerItem(
-                  //   imagePath: "assets/icons/user-icon.png",
-                  //   title: "Daftar Pengguna",
-                  //   onTap: () => Get.toNamed(Routes.HOME_PAGE),
-                  // ),
                   _buildDrawerItem(
                     imagePath: "assets/icons/file-icon.png",
                     title: "Template Humic",
