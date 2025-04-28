@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
+import 'package:humic_mobile/app/data/controllers/user_controllers.dart';
 
 class CustomDrawer extends StatelessWidget {
   final bool isAdmin;
@@ -18,6 +19,8 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userController = Get.find<UserController>();
+
     return Drawer(
       width: 232,
       child: Container(
@@ -45,21 +48,23 @@ class CustomDrawer extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Text(
-                    userName, // Menampilkan nama lengkap
-                    style: AppTypography.bodyLargeSemiBold.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
+                  Obx(() => Text(
+                        userController.userName
+                            .value, // Menggunakan nilai dari controller
+                        style: AppTypography.bodyLargeSemiBold.copyWith(
+                          color: Colors.white,
+                        ),
+                      )),
                   SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    userEmail, // Menampilkan email pengguna
-                    style: AppTypography.bodySmallRegular.copyWith(
-                      color: Colors.white70,
-                    ),
-                  ),
+                  Obx(() => Text(
+                        userController.userEmail
+                            .value, // Menggunakan nilai dari controller
+                        style: AppTypography.bodySmallRegular.copyWith(
+                          color: Colors.white70,
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -83,6 +88,7 @@ class CustomDrawer extends StatelessWidget {
             ),
 
             // **Logout Button**
+            // Pada bagian tombol logout:
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
@@ -93,21 +99,9 @@ class CustomDrawer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {
-                  Get.offAllNamed(Routes.LOGIN_PAGE);
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.logout,
-                      color: Colors.white,
-                      size: 33,
-                    ),
-                    SizedBox(width: 20),
-                    Text("Logout", style: TextStyle(color: Colors.white)),
-                  ],
-                ),
+                onPressed: () => userController.logout(),
+                child:
+                    const Text("Logout", style: TextStyle(color: Colors.white)),
               ),
             ),
           ],

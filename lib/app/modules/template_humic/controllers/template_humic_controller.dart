@@ -2,9 +2,6 @@ import 'package:get/get.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 
 class TemplateHumicController extends GetxController {
-  //TODO: Implement TemplateHumicController
-
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -20,13 +17,12 @@ class TemplateHumicController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
-
-  void Gunakan() {
-    Get.offNamed(Routes.INPUT_PAGE);
+  void Gunakan({int templateIndex = 1}) {
+    // Kirim parameter template yang dipilih ke halaman berikutnya
+    Get.toNamed(Routes.INPUT_PAGE, arguments: {'templateIndex': templateIndex});
   }
+}
 
-  void kembali() {
-    Get.offNamed(Routes.ADMIN_PAGE);
-  }
+void kembali() {
+  Get.offNamed(Routes.ADMIN_PAGE);
 }

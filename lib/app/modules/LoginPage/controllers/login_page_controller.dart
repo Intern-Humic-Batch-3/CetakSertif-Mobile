@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:humic_mobile/app/data/controllers/user_controllers.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,7 +14,7 @@ class LoginPageController extends GetxController {
 
   // URL endpoint login backend
   final String loginUrl =
-      'http://192.168.18.4:4000/api-auth/post/login'; // Gantilah sesuai dengan alamat backend Anda
+      'http://192.168.56.1:4000/api-auth/post/login'; // Gantilah sesuai dengan alamat backend Anda
 
   // Fungsi untuk toggle visibilitas password
   void togglePasswordVisibility() {
@@ -48,6 +49,7 @@ class LoginPageController extends GetxController {
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.body}");
 
+      // Di dalam fungsi login setelah login berhasil
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
         var token = responseData['token']; // Ambil token JWT dari response
@@ -56,7 +58,11 @@ class LoginPageController extends GetxController {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', token);
 
-        // Pindah ke halaman admin setelah login sukses
+        // Perbarui data user
+        final userController = Get.find<UserController>();
+        await userController.getUserData();
+
+        // Navigasi ke halaman berikutnya
         Get.offAllNamed(Routes.ADMIN_PAGE);
       } else {
         Get.snackbar("Login Failed", "Email atau password salah");

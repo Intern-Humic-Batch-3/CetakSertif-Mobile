@@ -8,20 +8,24 @@ import '../controllers/input_page_controller.dart';
 import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
 import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
+import 'package:humic_mobile/app/data/controllers/user_controllers.dart';
 
 class InputPageView extends GetView<InputPageController> {
   const InputPageView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan UserController untuk data pengguna
+    final userController = Get.find<UserController>();
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(),
-      drawer: const CustomDrawer(
-        isAdmin: true,
-        userEmail: "Daniel Admin",
-        userName: "Danieladmin@mail.com",
-      ),
+      drawer: Obx(() => CustomDrawer(
+        isAdmin: userController.isAdmin.value,
+        userEmail: userController.userEmail.value,
+        userName: userController.userName.value,
+      )),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: ListView(

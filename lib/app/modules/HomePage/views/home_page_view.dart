@@ -9,20 +9,25 @@ import 'package:humic_mobile/app/widgets/custom_drawer.dart';
 import 'package:humic_mobile/app/widgets/custom_header_input.dart';
 import 'package:humic_mobile/app/widgets/custom_submit_button.dart';
 import '../controllers/home_page_controller.dart';
+import 'package:humic_mobile/app/modules/AdminPage/controllers/admin_page_controller.dart';
+import 'package:humic_mobile/app/data/controllers/user_controllers.dart';
 
 class HomePageView extends GetView<HomePageController> {
   const HomePageView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan UserController untuk data pengguna
+    final userController = Get.find<UserController>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(),
-      drawer: CustomDrawer(
-        isAdmin: true,
-        userEmail: "Daniel Admin",
-        userName: "Danieladmin@mail.com",
-      ),
+      drawer: Obx(() => CustomDrawer(
+            isAdmin: userController.isAdmin.value,
+            userEmail: userController.userEmail.value,
+            userName: userController.userName.value,
+          )),
       body: Padding(
         padding: const EdgeInsets.all(29.0),
         child: Column(

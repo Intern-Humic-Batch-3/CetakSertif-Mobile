@@ -5,8 +5,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AdminPageController extends GetxController {
-  String userName = '';
-  String userEmail = '';
+  // Ubah menjadi variabel reaktif
+  final userName = ''.obs;
+  final userEmail = ''.obs;
+  final isLoading = true.obs;
 
   @override
   void onInit() {
@@ -16,18 +18,20 @@ class AdminPageController extends GetxController {
 
   // Fungsi untuk mengambil data pengguna dari endpoint /get/me
   void _getUserData() async {
+    isLoading.value = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token =
         prefs.getString('token'); // Ambil token dari SharedPreferences
 
     if (token == null) {
       Get.snackbar("Error", "Token tidak ditemukan");
+      isLoading.value = false;
       return;
     }
 
     // Panggil API untuk mendapatkan data pengguna
     final response = await http.get(
-      Uri.parse('http://192.168.18.4:4000/api-auth/get/me'),
+      Uri.parse('http://192.168.56.1:4000/api-auth/get/me'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization':
@@ -37,14 +41,14 @@ class AdminPageController extends GetxController {
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      userName = data['data'][0]['nama_depan'] +
+      userName.value = data['data'][0]['nama_depan'] +
           ' ' +
           data['data'][0]['nama_belakang']; // Ambil nama lengkap
-      userEmail = data['data'][0]['email']; // Ambil email pengguna
-      update(); // Perbarui UI
+      userEmail.value = data['data'][0]['email']; // Ambil email pengguna
     } else {
       Get.snackbar("Error", "Gagal mengambil data pengguna");
     }
+    isLoading.value = false;
   }
 
   @override
