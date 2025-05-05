@@ -6,6 +6,8 @@ import '../modules/HomePage/bindings/home_page_binding.dart';
 import '../modules/HomePage/views/home_page_view.dart';
 import '../modules/LoginPage/bindings/login_page_binding.dart';
 import '../modules/LoginPage/views/login_page_view.dart';
+import '../modules/hasil_pengguna/bindings/hasil_pengguna_binding.dart';
+import '../modules/hasil_pengguna/views/hasil_pengguna_view.dart';
 import '../modules/inputPage/bindings/input_page_binding.dart';
 import '../modules/inputPage/views/input_page_view.dart';
 import '../modules/template_humic/bindings/template_humic_binding.dart';
@@ -43,6 +45,11 @@ class AppPages {
       name: _Paths.TEMPLATE_HUMIC,
       page: () => const TemplateHumicView(),
       binding: TemplateHumicBinding(),
+    ),
+    GetPage(
+      name: _Paths.HASIL_PENGGUNA,
+      page: () => const HasilPenggunaView(),
+      binding: HasilPenggunaBinding(),
     ),
   ];
 }

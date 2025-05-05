@@ -8,6 +8,7 @@ abstract class Routes {
   static const INPUT_PAGE = _Paths.INPUT_PAGE;
   static const ADMIN_PAGE = _Paths.ADMIN_PAGE;
   static const TEMPLATE_HUMIC = _Paths.TEMPLATE_HUMIC;
+  static const HASIL_PENGGUNA = _Paths.HASIL_PENGGUNA;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const INPUT_PAGE = '/input-page';
   static const ADMIN_PAGE = '/admin-page';
   static const TEMPLATE_HUMIC = '/template-humic';
+  static const HASIL_PENGGUNA = '/hasil-pengguna';
 }

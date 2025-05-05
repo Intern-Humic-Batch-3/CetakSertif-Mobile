@@ -62,6 +62,6 @@ class AdminPageController extends GetxController {
   }
 
   void Tambah() {
-    Get.offNamed(Routes.HOME_PAGE);
+    Get.offNamed(Routes.TEMPLATE_HUMIC);
   }
 }

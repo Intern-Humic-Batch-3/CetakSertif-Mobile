@@ -9,7 +9,6 @@ import 'package:humic_mobile/app/widgets/custom_drawer.dart';
 import 'package:humic_mobile/app/widgets/custom_header_input.dart';
 import 'package:humic_mobile/app/widgets/custom_submit_button.dart';
 import '../controllers/home_page_controller.dart';
-import 'package:humic_mobile/app/modules/AdminPage/controllers/admin_page_controller.dart';
 import 'package:humic_mobile/app/data/controllers/user_controllers.dart';
 
 class HomePageView extends GetView<HomePageController> {

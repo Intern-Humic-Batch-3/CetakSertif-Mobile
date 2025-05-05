@@ -17,15 +17,15 @@ class InputPageView extends GetView<InputPageController> {
   Widget build(BuildContext context) {
     // Mendapatkan UserController untuk data pengguna
     final userController = Get.find<UserController>();
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(),
       drawer: Obx(() => CustomDrawer(
-        isAdmin: userController.isAdmin.value,
-        userEmail: userController.userEmail.value,
-        userName: userController.userName.value,
-      )),
+            isAdmin: userController.isAdmin.value,
+            userEmail: userController.userEmail.value,
+            userName: userController.userName.value,
+          )),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: ListView(
@@ -107,7 +107,156 @@ class InputPageView extends GetView<InputPageController> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.toNamed('/nextPage');
+                  // Tampilkan dialog konfirmasi
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Ingin Menambah Data?',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Image.asset(
+                              'assets/icons/warning-icon.png',
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Apakah anda yakin ingin menambah data ini?',
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 24),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                // Tombol Batal
+                                SizedBox(
+                                  width: 120,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: AppColors.primary,
+                                      side:
+                                          BorderSide(color: AppColors.primary),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Tutup dialog
+                                    },
+                                    child: const Text('Batal'),
+                                  ),
+                                ),
+                                // Tombol Tambah
+                                SizedBox(
+                                  width: 120,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Tutup dialog konfirmasi
+
+                                      // Simulasi proses pengiriman data
+                                      // Di sini Anda bisa memanggil fungsi controller untuk mengirim data
+
+                                      // Tampilkan dialog sukses
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const SizedBox(height: 16),
+                                                const Text(
+                                                  'Data Berhasil Ditambahkan!',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                const SizedBox(height: 16),
+                                                Container(
+                                                  width: 80,
+                                                  height: 80,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.check,
+                                                    color: Colors.white,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 24),
+                                                SizedBox(
+                                                  width: double.infinity,
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          AppColors.primary,
+                                                      foregroundColor:
+                                                          Colors.white,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); // Tutup dialog sukses
+                                                      // Navigasi ke halaman hasil pengguna
+                                                      Get.toNamed('/hasil-pengguna');
+                                                    },
+                                                    child: const Text('Tutup'),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: const Text('Tambah'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
