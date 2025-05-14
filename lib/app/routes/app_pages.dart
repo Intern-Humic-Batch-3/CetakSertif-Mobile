@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
-
-import '../modules/AdminPage/bindings/admin_page_binding.dart';
-import '../modules/AdminPage/views/admin_page_view.dart';
+import 'package:humic_mobile/app/modules/SuperAdmin/AdminPage/bindings/admin_page_binding.dart';
+import 'package:humic_mobile/app/modules/SuperAdmin/AdminPage/views/admin_page_view.dart';
+import 'package:humic_mobile/app/modules/SuperAdmin/DaftarUserPage/bindings/daftar_user_page_binding.dart';
+import 'package:humic_mobile/app/modules/SuperAdmin/DaftarUserPage/views/daftar_user_page_view.dart';
 import '../modules/HomePage/bindings/home_page_binding.dart';
 import '../modules/HomePage/views/home_page_view.dart';
 import '../modules/LoginPage/bindings/login_page_binding.dart';
@@ -50,6 +51,11 @@ class AppPages {
       name: _Paths.HASIL_PENGGUNA,
       page: () => const HasilPenggunaView(),
       binding: HasilPenggunaBinding(),
+    ),
+    GetPage(
+      name: _Paths.DAFTAR_USER_PAGE,
+      page: () => const DaftarUserView(),
+      binding: DaftarUserPageBinding(),
     ),
   ];
 }

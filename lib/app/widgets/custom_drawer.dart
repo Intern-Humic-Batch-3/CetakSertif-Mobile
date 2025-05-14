@@ -78,6 +78,13 @@ class CustomDrawer extends StatelessWidget {
                     title: "Riwayat Sertifikat",
                     onTap: () => Get.offAllNamed(Routes.ADMIN_PAGE),
                   ),
+                  // Tambahkan menu Daftar Pengguna
+                  if (isAdmin) // Hanya tampilkan jika user adalah admin
+                    _buildDrawerItem(
+                      imagePath: "assets/icons/user-icon.png",
+                      title: "Daftar Pengguna",
+                      onTap: () => Get.toNamed(Routes.DAFTAR_USER_PAGE),
+                    ),
                   _buildDrawerItem(
                     imagePath: "assets/icons/file-icon.png",
                     title: "Template Humic",
