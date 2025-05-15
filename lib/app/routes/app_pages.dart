@@ -13,6 +13,8 @@ import '../modules/inputPage/bindings/input_page_binding.dart';
 import '../modules/inputPage/views/input_page_view.dart';
 import '../modules/template_humic/bindings/template_humic_binding.dart';
 import '../modules/template_humic/views/template_humic_view.dart';
+import '../modules/result_page/bindings/result_page_binding.dart';
+import '../modules/result_page/views/result_page_view.dart';
 
 part 'app_routes.dart';
 
@@ -56,6 +58,11 @@ class AppPages {
       name: _Paths.DAFTAR_USER_PAGE,
       page: () => const DaftarUserView(),
       binding: DaftarUserPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESULT_PAGE,
+      page: () => const ResultPageView(),
+      binding: ResultPageBinding(),
     ),
   ];
 }

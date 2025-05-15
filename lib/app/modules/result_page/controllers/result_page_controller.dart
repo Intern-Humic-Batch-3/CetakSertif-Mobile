@@ -1,0 +1,160 @@
+import 'dart:io';
+import 'package:excel/excel.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:humic_mobile/app/data/models/certificate_model.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
+import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
+
+class ResultPageController extends GetxController {
+  RxList<Certificate> certificates = <Certificate>[].obs;
+  RxBool isLoading = true.obs;
+  RxString templatePath = ''.obs;
+  RxInt templateIndex = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    final args = Get.arguments;
+    if (args != null) {
+      final excelFilePath = args['excelFilePath'] as String;
+      templatePath.value = args['emptyTemplatePath'] as String;
+      templateIndex.value = args['templateIndex'] as int;
+
+      loadExcelData(excelFilePath);
+    }
+  }
+
+  Future<void> loadExcelData(String filePath) async {
+    isLoading.value = true;
+
+    try {
+      final bytes = File(filePath).readAsBytesSync();
+      final excel = Excel.decodeBytes(bytes);
+
+      // Ambil sheet pertama
+      final sheet = excel.tables.keys.first;
+      final rows = excel.tables[sheet]?.rows;
+
+      if (rows != null && rows.isNotEmpty) {
+        // Asumsikan kolom pertama adalah nama
+        for (var i = 0; i < rows.length; i++) {
+          final row = rows[i];
+          if (row.isNotEmpty && row[0]?.value != null) {
+            final name = row[0]!.value.toString();
+            certificates.add(Certificate(
+              name: name,
+              templatePath: templatePath.value,
+            ));
+          }
+        }
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal memuat data Excel: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<ui.Image?> loadTemplateImage() async {
+    try {
+      print("Loading template from: ${templatePath.value}");
+      final ByteData data = await rootBundle.load(templatePath.value);
+      final Uint8List bytes = data.buffer.asUint8List();
+      final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+      final ui.FrameInfo fi = await codec.getNextFrame();
+      return fi.image;
+    } catch (e) {
+      print("Error loading template image: $e");
+      Get.snackbar('Error', 'Gagal memuat gambar template: $e');
+      return null;
+    }
+  }
+
+  Future<File?> generateCertificate(String name) async {
+    try {
+      final ui.Image? templateImage = await loadTemplateImage();
+
+      if (templateImage == null) {
+        throw Exception("Template image tidak dapat dimuat");
+      }
+
+      // Buat canvas untuk menggambar
+      final recorder = ui.PictureRecorder();
+      final canvas = Canvas(recorder);
+
+      // Gambar template
+      canvas.drawImage(templateImage, Offset.zero, Paint());
+
+      // Tentukan gaya teks untuk nama
+      final textStyle = ui.TextStyle(
+        color: Colors.black,
+        fontSize: 48,
+        fontWeight: FontWeight.bold,
+      );
+
+      final paragraphStyle = ui.ParagraphStyle(
+        textAlign: TextAlign.center,
+        fontSize: 48,
+      );
+
+      final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
+        ..pushStyle(textStyle)
+        ..addText(name);
+
+      final paragraph = paragraphBuilder.build();
+      paragraph.layout(
+          ui.ParagraphConstraints(width: templateImage.width.toDouble()));
+
+      // Tentukan posisi nama berdasarkan template yang dipilih
+      double x = 0;
+      double y = 0;
+
+      switch (templateIndex.value) {
+        case 1:
+          // Posisi untuk template 1
+          x = (templateImage.width - paragraph.width) / 2;
+          y = templateImage.height *
+              0.45; // Sesuaikan posisi Y untuk template 1
+          break;
+        case 2:
+          // Posisi untuk template 2
+          x = (templateImage.width - paragraph.width) / 2;
+          y = templateImage.height * 0.5; // Sesuaikan posisi Y untuk template 2
+          break;
+        default:
+          // Posisi default
+          x = (templateImage.width - paragraph.width) / 2;
+          y = templateImage.height * 0.45;
+      }
+
+      // Gambar teks nama pada canvas
+      canvas.drawParagraph(paragraph, Offset(x, y));
+
+      // Konversi ke gambar
+      final picture = recorder.endRecording();
+      final img =
+          await picture.toImage(templateImage.width, templateImage.height);
+      final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
+
+      if (byteData == null) {
+        throw Exception("Gagal mengkonversi gambar");
+      }
+
+      final buffer = byteData.buffer.asUint8List();
+
+      // Simpan ke file sementara
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/$name-certificate.png');
+      await file.writeAsBytes(buffer);
+
+      return file;
+    } catch (e) {
+      print("Error generating certificate: $e");
+      Get.snackbar('Error', 'Gagal membuat sertifikat: $e');
+      return null;
+    }
+  }
+}

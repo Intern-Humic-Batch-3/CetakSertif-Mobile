@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:humic_mobile/app/widgets/custom_drawer.dart';
 import 'package:humic_mobile/app/widgets/custom_header_input.dart';
 import 'package:intl/intl.dart';
@@ -235,8 +236,31 @@ class InputPageView extends GetView<InputPageController> {
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop(); // Tutup dialog sukses
-                                                      // Navigasi ke halaman hasil pengguna
-                                                      Get.toNamed('/hasil-pengguna');
+
+                                                      // Tambahkan logging untuk debug
+                                                      print(
+                                                          "Excel File Path: ${controller.selectedExcelFilePath.value}");
+
+                                                      // Periksa apakah file Excel sudah dipilih
+                                                      if (controller
+                                                          .selectedExcelFilePath
+                                                          .value
+                                                          .isNotEmpty) {
+                                                        Get.toNamed(
+                                                            Routes.RESULT_PAGE,
+                                                            arguments: {
+                                                              'excelFilePath':
+                                                                  controller
+                                                                      .selectedExcelFilePath
+                                                                      .value,
+                                                              'emptyTemplatePath':
+                                                                  'assets/images/sertif-kosong-1.png',
+                                                              'templateIndex': 1
+                                                            });
+                                                      } else {
+                                                        Get.snackbar('Error',
+                                                            'Silakan pilih file Excel terlebih dahulu');
+                                                      }
                                                     },
                                                     child: const Text('Tutup'),
                                                   ),
@@ -362,6 +386,8 @@ Widget _buildTTDFilePickerField(String label, RxString fileName,
 // File Picker Field
 Widget _buildFilePickerField(String label, RxString fileName,
     {List<String>? allowedExtensions}) {
+  final controller = Get.find<InputPageController>();
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -376,6 +402,8 @@ Widget _buildFilePickerField(String label, RxString fileName,
           );
           if (result != null && result.files.isNotEmpty) {
             fileName.value = result.files.single.name; // Set nama file
+            controller.selectedExcelFilePath.value =
+                result.files.single.path!; // Set path file
           }
         },
         child: Obx(
@@ -434,7 +462,7 @@ Widget _buildFilePickerField(String label, RxString fileName,
 
 // Date Picker Field
 Widget _buildDateField(
-    String hintText, BuildContext context, RxString dateValue) {
+    String hintText, BuildContext context, Rxn<DateTime> dateValue) {
   return Obx(() => GestureDetector(
         onTap: () async {
           DateTime? pickedDate = await showDatePicker(
@@ -447,14 +475,12 @@ Widget _buildDateField(
                 data: Theme.of(context).copyWith(
                   colorScheme: ColorScheme.light(
                     primary: AppColors.primary,
-                    onPrimary:
-                        AppColors.textTertiary, // Warna teks tanggal dipilih
-                    onSurface: Colors.black, // Warna teks default
+                    onPrimary: AppColors.textTertiary,
+                    onSurface: Colors.black,
                   ),
                   textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
-                      foregroundColor:
-                          AppColors.primary, // Warna tombol (CANCEL/OK)
+                      foregroundColor: AppColors.primary,
                     ),
                   ),
                 ),
@@ -463,9 +489,7 @@ Widget _buildDateField(
             },
           );
           if (pickedDate != null) {
-            // Format tanggal
-            String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-            dateValue.value = formattedDate; // Simpan ke controller
+            dateValue.value = pickedDate; // Simpan DateTime langsung
           }
         },
         child: Container(
@@ -481,13 +505,15 @@ Widget _buildDateField(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                dateValue.value.isEmpty ? hintText : dateValue.value,
+                dateValue.value != null
+                    ? DateFormat('dd-MM-yyyy').format(dateValue.value!)
+                    : hintText,
                 style: AppTypography.bodyMediumRegular.copyWith(
                   color:
-                      dateValue.value.isEmpty ? Colors.grey[600] : Colors.black,
+                      dateValue.value != null ? Colors.black : Colors.grey[600],
                 ),
               ),
-              const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
+              Icon(Icons.calendar_today, color: Colors.grey[600], size: 20),
             ],
           ),
         ),

@@ -52,8 +52,8 @@ class HasilPenggunaView extends GetView<HasilPenggunaController> {
 
                   return _buildCertificateCard(
                     imagePath: isEvenIndex
-                        ? 'assets/images/certificate_template_1.png'
-                        : 'assets/images/certificate_template_2.png',
+                        ? 'assets/images/sertif-kosong-1.png'
+                        : 'assets/images/sertif-kosong-2.png',
                     title: 'Workshop Humic Engineering',
                     onTap: () {
                       // Aksi ketika sertifikat diklik

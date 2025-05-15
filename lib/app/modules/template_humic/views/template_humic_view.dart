@@ -14,6 +14,9 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
   @override
   Widget build(BuildContext context) {
     final userController = Get.find<UserController>();
+    // Ambil excelFilePath dari arguments jika ada
+    final Map<String, dynamic> args = Get.arguments ?? {};
+    final String excelFilePath = args['excelFilePath'] ?? '';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -37,8 +40,9 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
               _buildTemplateItem(
                 context,
                 "Template Humic Sertifikat",
-                "assets/images/sertif-template.png",
-                () => controller.Gunakan(templateIndex: 1),
+                "assets/images/sertif-kosong-1.png",
+                () => controller.Gunakan(
+                    templateIndex: 1, excelFilePath: excelFilePath),
               ),
 
               const SizedBox(height: 30),
@@ -47,19 +51,21 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
               _buildTemplateItem(
                 context,
                 "Template Humic Sertifikat",
-                "assets/images/sertif-template-2.png",
-                () => controller.Gunakan(templateIndex: 2),
+                "assets/images/sertif-kosong-2.png",
+                () => controller.Gunakan(
+                    templateIndex: 2, excelFilePath: excelFilePath),
               ),
 
               const SizedBox(height: 30),
 
-              // Template 3
-              _buildTemplateItem(
-                context,
-                "Template Humic Sertifikat",
-                "assets/images/sertif-template-3.png",
-                () => controller.Gunakan(templateIndex: 3),
-              ),
+              // // Template 3
+              // _buildTemplateItem(
+              //   context,
+              //   "Template Humic Sertifikat",
+              //   "assets/images/sertif-template-3.png",
+              //   () => controller.Gunakan(
+              //       templateIndex: 3, excelFilePath: excelFilePath),
+              // ),
 
               const SizedBox(height: 20),
             ],
