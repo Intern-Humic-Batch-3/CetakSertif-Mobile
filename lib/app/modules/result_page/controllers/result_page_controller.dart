@@ -48,6 +48,7 @@ class ResultPageController extends GetxController {
             certificates.add(Certificate(
               name: name,
               templatePath: templatePath.value,
+              templateIndex: templateIndex.value,
             ));
           }
         }
@@ -59,7 +60,7 @@ class ResultPageController extends GetxController {
     }
   }
 
-  Future<ui.Image?> loadTemplateImage() async {
+  Future<ui.Image> loadTemplateImage() async {
     try {
       print("Loading template from: ${templatePath.value}");
       final ByteData data = await rootBundle.load(templatePath.value);
@@ -70,17 +71,20 @@ class ResultPageController extends GetxController {
     } catch (e) {
       print("Error loading template image: $e");
       Get.snackbar('Error', 'Gagal memuat gambar template: $e');
-      return null;
+      // Fallback ke template default jika terjadi error
+      final ByteData defaultData =
+          await rootBundle.load('assets/images/sertif-kosong-1.png');
+      final Uint8List defaultBytes = defaultData.buffer.asUint8List();
+      final ui.Codec defaultCodec =
+          await ui.instantiateImageCodec(defaultBytes);
+      final ui.FrameInfo defaultFi = await defaultCodec.getNextFrame();
+      return defaultFi.image;
     }
   }
 
-  Future<File?> generateCertificate(String name) async {
+  Future<File> generateCertificate(String name) async {
     try {
-      final ui.Image? templateImage = await loadTemplateImage();
-
-      if (templateImage == null) {
-        throw Exception("Template image tidak dapat dimuat");
-      }
+      final ui.Image templateImage = await loadTemplateImage();
 
       // Buat canvas untuk menggambar
       final recorder = ui.PictureRecorder();
@@ -89,16 +93,16 @@ class ResultPageController extends GetxController {
       // Gambar template
       canvas.drawImage(templateImage, Offset.zero, Paint());
 
-      // Tentukan gaya teks untuk nama
+      // Tambahkan nama
       final textStyle = ui.TextStyle(
         color: Colors.black,
-        fontSize: 48,
+        fontSize: 80,
         fontWeight: FontWeight.bold,
       );
 
       final paragraphStyle = ui.ParagraphStyle(
         textAlign: TextAlign.center,
-        fontSize: 48,
+        fontSize: 60,
       );
 
       final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
@@ -123,7 +127,8 @@ class ResultPageController extends GetxController {
         case 2:
           // Posisi untuk template 2
           x = (templateImage.width - paragraph.width) / 2;
-          y = templateImage.height * 0.5; // Sesuaikan posisi Y untuk template 2
+          y = templateImage.height *
+              0.43; // Sesuaikan posisi Y untuk template 2
           break;
         default:
           // Posisi default
@@ -155,7 +160,7 @@ class ResultPageController extends GetxController {
     } catch (e) {
       print("Error generating certificate: $e");
       Get.snackbar('Error', 'Gagal membuat sertifikat: $e');
-      return null;
+      throw e;
     }
   }
 

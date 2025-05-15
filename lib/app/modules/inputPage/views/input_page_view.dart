@@ -243,9 +243,19 @@ class InputPageView extends GetView<InputPageController> {
 
                                                       // Periksa apakah file Excel sudah dipilih
                                                       if (controller
-                                                          .selectedExcelFilePath
-                                                          .value
-                                                          .isNotEmpty) {
+                                                              .selectedExcelFilePath
+                                                              .value
+                                                              .isNotEmpty) {
+                                                        // Ambil argumen dari halaman sebelumnya
+                                                        final args =
+                                                            Get.arguments;
+                                                        final templateIndex =
+                                                            args?['templateIndex'] ??
+                                                                1;
+                                                        final emptyTemplatePath =
+                                                            args?['emptyTemplatePath'] ??
+                                                                'assets/images/sertif-kosong-1.png';
+
                                                         Get.toNamed(
                                                             Routes.RESULT_PAGE,
                                                             arguments: {
@@ -254,8 +264,9 @@ class InputPageView extends GetView<InputPageController> {
                                                                       .selectedExcelFilePath
                                                                       .value,
                                                               'emptyTemplatePath':
-                                                                  'assets/images/sertif-kosong-1.png',
-                                                              'templateIndex': 1
+                                                                  emptyTemplatePath,
+                                                              'templateIndex':
+                                                                  templateIndex
                                                             });
                                                       } else {
                                                         Get.snackbar('Error',
