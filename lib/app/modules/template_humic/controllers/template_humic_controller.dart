@@ -22,10 +22,9 @@ class TemplateHumicController extends GetxController {
   }
 
   void Gunakan({required int templateIndex, String excelFilePath = ''}) {
-    // Simpan template yang dipilih
     selectedTemplateIndex.value = templateIndex;
+    print("Template terpilih: $templateIndex");
 
-    // Tentukan template kosong yang sesuai berdasarkan template yang dipilih
     String emptyTemplatePath = '';
 
     switch (templateIndex) {
@@ -39,7 +38,8 @@ class TemplateHumicController extends GetxController {
         emptyTemplatePath = 'assets/images/sertif-kosong-1.png';
     }
 
-    // Navigasi ke halaman input dengan membawa informasi template yang dipilih
+    print("Path template kosong: $emptyTemplatePath");
+
     Get.toNamed(Routes.INPUT_PAGE, arguments: {
       'templateIndex': templateIndex,
       'emptyTemplatePath': emptyTemplatePath

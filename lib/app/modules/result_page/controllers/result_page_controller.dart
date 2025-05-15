@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as img;
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
+import 'package:file_saver/file_saver.dart';
 
 class ResultPageController extends GetxController {
   RxList<Certificate> certificates = <Certificate>[].obs;
@@ -155,6 +156,66 @@ class ResultPageController extends GetxController {
       print("Error generating certificate: $e");
       Get.snackbar('Error', 'Gagal membuat sertifikat: $e');
       return null;
+    }
+  }
+
+  // Tambahkan fungsi baru untuk mengunduh sertifikat
+  Future<bool> downloadCertificate(String name) async {
+    try {
+      // Generate sertifikat terlebih dahulu
+      final tempFile = await generateCertificate(name);
+
+      if (tempFile == null) {
+        throw Exception("Gagal membuat file sertifikat");
+      }
+
+      // Dapatkan direktori Pictures
+      Directory? directory;
+      if (Platform.isAndroid) {
+        directory = Directory('/storage/emulated/0/Pictures/Humic');
+        if (!await directory.exists()) {
+          await directory.create(recursive: true);
+        }
+      } else {
+        final appDir = await getApplicationDocumentsDirectory();
+        directory = Directory('${appDir.path}/Humic');
+        if (!await directory.exists()) {
+          await directory.create(recursive: true);
+        }
+      }
+
+      // Buat nama file yang unik dengan timestamp
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final fileName = '$name-certificate-$timestamp.png';
+      final targetPath = '${directory.path}/$fileName';
+
+      // Salin file
+      final savedFile = await tempFile.copy(targetPath);
+
+      // Beri tahu galeri tentang file baru (hanya untuk Android)
+      if (Platform.isAndroid) {
+        try {
+          // Tambahkan file ke Media Store
+          final mediaScanIntent = MethodChannel('com.humic.app/media_scanner');
+          await mediaScanIntent
+              .invokeMethod('scanFile', {'path': savedFile.path});
+        } catch (e) {
+          print("Error scanning file: $e");
+          // Lanjutkan meskipun gagal scan file
+        }
+      }
+
+      Get.snackbar(
+        'Berhasil',
+        'Sertifikat berhasil diunduh ke: ${savedFile.path}',
+        duration: Duration(seconds: 5),
+      );
+
+      return true;
+    } catch (e) {
+      print("Error downloading certificate: $e");
+      Get.snackbar('Error', 'Gagal mengunduh sertifikat: $e');
+      return false;
     }
   }
 }

@@ -148,14 +148,8 @@ class ResultPageView extends GetView<ResultPageController> {
                                     foregroundColor: Colors.white,
                                   ),
                                   onPressed: () async {
-                                    final file = await controller
-                                        .generateCertificate(certificate.name);
-                                    // Implementasi unduh file
-                                    Get.snackbar(
-                                      'Sukses',
-                                      'Sertifikat berhasil diunduh',
-                                      snackPosition: SnackPosition.BOTTOM,
-                                    );
+                                    await controller
+                                        .downloadCertificate(certificate.name);
                                   },
                                 ),
                               ],

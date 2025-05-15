@@ -14,7 +14,7 @@ class LoginPageController extends GetxController {
 
   // URL endpoint login backend
   final String loginUrl =
-      'http://192.168.56.1:4000/api-auth/post/login'; // Gantilah sesuai dengan alamat backend Anda
+      'http://192.168.18.4:4000/api-auth/post/login'; // Gantilah sesuai dengan alamat backend Anda
 
   // Fungsi untuk toggle visibilitas password
   void togglePasswordVisibility() {

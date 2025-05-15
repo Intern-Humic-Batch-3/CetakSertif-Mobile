@@ -31,7 +31,7 @@ class AdminPageController extends GetxController {
 
     // Panggil API untuk mendapatkan data pengguna
     final response = await http.get(
-      Uri.parse('http://192.168.56.1:4000/api-auth/get/me'),
+      Uri.parse('http://192.168.18.4:4000/api-auth/get/me'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization':

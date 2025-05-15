@@ -30,7 +30,7 @@ class UserController extends GetxController {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.56.1:4000/api-auth/get/me'),
+        Uri.parse('http://192.168.18.4:4000/api-auth/get/me'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -43,11 +43,12 @@ class UserController extends GetxController {
             ' ' +
             data['data'][0]['nama_belakang'];
         userEmail.value = data['data'][0]['email'];
-        
+
         // Tambahkan pengecekan role untuk isAdmin
         isAdmin.value = data['data'][0]['role'] == 'admin';
-        
-        print("Data user berhasil diambil: ${userName.value}, ${userEmail.value}, Admin: ${isAdmin.value}");
+
+        print(
+            "Data user berhasil diambil: ${userName.value}, ${userEmail.value}, Admin: ${isAdmin.value}");
       } else {
         Get.snackbar("Error", "Gagal mengambil data pengguna");
         print("Gagal mengambil data: ${response.statusCode}, ${response.body}");

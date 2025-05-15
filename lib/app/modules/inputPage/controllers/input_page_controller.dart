@@ -38,4 +38,31 @@ class InputPageController extends GetxController {
       'excelFilePath': selectedExcelFilePath.value,
     });
   }
+
+  void navigateToResultPage() {
+    if (selectedExcelFilePath.value.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Silakan pilih file Excel terlebih dahulu',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    // Ambil argumen dari halaman sebelumnya
+    final args = Get.arguments;
+    final templateIndex = args?['templateIndex'] ?? 1;
+    final emptyTemplatePath =
+        args?['emptyTemplatePath'] ?? 'assets/images/sertif-kosong-1.png';
+
+    print(
+        "Navigasi ke Result Page dengan template: $templateIndex, path: $emptyTemplatePath");
+
+    // Teruskan ke halaman result
+    Get.toNamed(Routes.RESULT_PAGE, arguments: {
+      'excelFilePath': selectedExcelFilePath.value,
+      'templateIndex': templateIndex,
+      'emptyTemplatePath': emptyTemplatePath
+    });
+  }
 }
