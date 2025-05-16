@@ -44,7 +44,7 @@ class DaftarUserView extends GetView<DaftarUserController> {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () => controller.tambahUser(),
+                onPressed: () => _showTambahUserDialog(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
@@ -86,14 +86,19 @@ class DaftarUserView extends GetView<DaftarUserController> {
             Container(
               decoration: BoxDecoration(
                 color: AppColors.primary,
-                borderRadius: BorderRadius.zero,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
               ),
               child: Row(
                 children: [
                   _buildTableHeader('No.',
                       flex: 1, alignment: TextAlign.center),
                   _buildTableHeader('Nama Pengguna',
-                      flex: 4, alignment: TextAlign.center),
+                      flex: 3, alignment: TextAlign.center),
+                  _buildTableHeader('Role',
+                      flex: 2, alignment: TextAlign.center),
                 ],
               ),
             ),
@@ -120,21 +125,34 @@ class DaftarUserView extends GetView<DaftarUserController> {
                     final user = controller.userList[index];
                     final fullName =
                         '${user['nama_depan']} ${user['nama_belakang']}';
+                    final role = user['role'] ?? 'user';
+                    
+                    // Menentukan border radius untuk baris terakhir
+                    final isLastItem = index == controller.userList.length - 1;
+                    final borderRadius = isLastItem 
+                        ? BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          )
+                        : null;
 
                     return Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: index % 2 == 0 ? Colors.grey[100] : Colors.white,
                         border: Border(
                           bottom: BorderSide(color: Colors.grey[300]!),
                           left: BorderSide(color: Colors.grey[300]!),
                           right: BorderSide(color: Colors.grey[300]!),
                         ),
+                        borderRadius: borderRadius,
                       ),
                       child: Row(
                         children: [
                           _buildTableCell('${index + 1}',
                               flex: 1, alignment: TextAlign.center),
-                          _buildTableCell(fullName, flex: 4),
+                          _buildTableCell(fullName, flex: 3),
+                          _buildTableCell(role,
+                              flex: 2, alignment: TextAlign.center),
                         ],
                       ),
                     );
@@ -172,6 +190,156 @@ class DaftarUserView extends GetView<DaftarUserController> {
           ],
         ),
       ),
+    );
+  }
+
+  // Dialog untuk tambah user
+  void _showTambahUserDialog(BuildContext context) {
+    final TextEditingController namaDepanController = TextEditingController();
+    final TextEditingController namaBelakangController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      'Tambah Data Pengguna',
+                      style: AppTypography.bodyLargeBold.copyWith(
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Nama Depan
+                  Text(
+                    'Nama Depan',
+                    style: AppTypography.bodyMediumBold.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: namaDepanController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Nama Belakang
+                  Text(
+                    'Nama Belakang',
+                    style: AppTypography.bodyMediumBold.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: namaBelakangController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Email
+                  Text(
+                    'Email',
+                    style: AppTypography.bodyMediumBold.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Password
+                  Text(
+                    'Password',
+                    style: AppTypography.bodyMediumBold.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Submit Button
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Panggil fungsi tambah user di controller dengan nama depan dan belakang terpisah
+                        controller.addNewUser(
+                          namaDepanController.text,
+                          namaBelakangController.text,
+                          emailController.text,
+                          passwordController.text,
+                        );
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        minimumSize: const Size(120, 40),
+                      ),
+                      child: Text(
+                        'Submit',
+                        style: AppTypography.bodyMediumSemiBold.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

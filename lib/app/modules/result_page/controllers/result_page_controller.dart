@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:humic_mobile/app/data/models/certificate_model.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:image/image.dart' as img;
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
-import 'package:file_saver/file_saver.dart';
 
 class ResultPageController extends GetxController {
   RxList<Certificate> certificates = <Certificate>[].obs;
@@ -102,7 +100,7 @@ class ResultPageController extends GetxController {
 
       final paragraphStyle = ui.ParagraphStyle(
         textAlign: TextAlign.center,
-        fontSize: 60,
+        fontSize: 80,
       );
 
       final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)

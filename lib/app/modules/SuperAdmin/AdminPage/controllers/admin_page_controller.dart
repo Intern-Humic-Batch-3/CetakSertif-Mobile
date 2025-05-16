@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:humic_mobile/app/data/config/api_config.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -20,8 +21,7 @@ class AdminPageController extends GetxController {
   void _getUserData() async {
     isLoading.value = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token =
-        prefs.getString('token'); // Ambil token dari SharedPreferences
+    String? token = prefs.getString('token');
 
     if (token == null) {
       Get.snackbar("Error", "Token tidak ditemukan");
@@ -31,11 +31,10 @@ class AdminPageController extends GetxController {
 
     // Panggil API untuk mendapatkan data pengguna
     final response = await http.get(
-      Uri.parse('http://192.168.18.4:4000/api-auth/get/me'),
+      Uri.parse(ApiConfig.getMeUrl),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer $token', // Menambahkan token ke header Authorization
+        'Authorization': 'Bearer $token',
       },
     );
 

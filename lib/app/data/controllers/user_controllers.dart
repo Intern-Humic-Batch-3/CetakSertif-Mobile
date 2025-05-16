@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:humic_mobile/app/data/config/api_config.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 
 class UserController extends GetxController {
@@ -30,7 +31,7 @@ class UserController extends GetxController {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.18.4:4000/api-auth/get/me'),
+        Uri.parse(ApiConfig.getMeUrl),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

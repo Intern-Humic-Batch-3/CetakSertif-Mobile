@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:humic_mobile/app/data/config/api_config.dart';
 import 'package:humic_mobile/app/data/controllers/user_controllers.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,8 +14,8 @@ class LoginPageController extends GetxController {
   final passwordController = TextEditingController();
 
   // URL endpoint login backend
-  final String loginUrl =
-      'http://192.168.18.4:4000/api-auth/post/login'; // Gantilah sesuai dengan alamat backend Anda
+  // Gunakan ApiConfig untuk mendapatkan URL
+  final String loginUrl = ApiConfig.loginUrl;
 
   // Fungsi untuk toggle visibilitas password
   void togglePasswordVisibility() {
