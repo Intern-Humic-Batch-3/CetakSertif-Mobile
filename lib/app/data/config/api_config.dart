@@ -19,6 +19,4 @@ class ApiConfig {
 
   // Endpoint untuk user
   static String get getAllUsersUrl => '$baseUrl/api-user/get/allUser';
-
-  // Tambahkan endpoint lain sesuai kebutuhan
 }

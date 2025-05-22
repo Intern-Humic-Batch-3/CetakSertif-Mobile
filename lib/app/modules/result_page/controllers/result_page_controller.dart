@@ -91,16 +91,18 @@ class ResultPageController extends GetxController {
       // Gambar template
       canvas.drawImage(templateImage, Offset.zero, Paint());
 
-      // Tambahkan nama
+      // Tambahkan nama dengan font Great Vibes
       final textStyle = ui.TextStyle(
         color: Colors.black,
-        fontSize: 80,
-        fontWeight: FontWeight.bold,
+        fontSize: 100,
+        fontWeight: FontWeight.normal,
+        fontFamily: 'Great Vibes',
       );
 
       final paragraphStyle = ui.ParagraphStyle(
         textAlign: TextAlign.center,
-        fontSize: 80,
+        fontSize: 100,
+        fontFamily: 'Great Vibes',
       );
 
       final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)

@@ -243,9 +243,9 @@ class InputPageView extends GetView<InputPageController> {
 
                                                       // Periksa apakah file Excel sudah dipilih
                                                       if (controller
-                                                              .selectedExcelFilePath
-                                                              .value
-                                                              .isNotEmpty) {
+                                                          .selectedExcelFilePath
+                                                          .value
+                                                          .isNotEmpty) {
                                                         // Ambil argumen dari halaman sebelumnya
                                                         final args =
                                                             Get.arguments;
@@ -256,8 +256,10 @@ class InputPageView extends GetView<InputPageController> {
                                                             args?['emptyTemplatePath'] ??
                                                                 'assets/images/sertif-kosong-1.png';
 
+                                                        // Ubah navigasi ke halaman preview
                                                         Get.toNamed(
-                                                            Routes.RESULT_PAGE,
+                                                            Routes
+                                                                .CERTIFICATE_PREVIEW,
                                                             arguments: {
                                                               'excelFilePath':
                                                                   controller
@@ -266,7 +268,11 @@ class InputPageView extends GetView<InputPageController> {
                                                               'emptyTemplatePath':
                                                                   emptyTemplatePath,
                                                               'templateIndex':
-                                                                  templateIndex
+                                                                  templateIndex,
+                                                              'activityName':
+                                                                  controller
+                                                                      .namaKegiatanController
+                                                                      .text
                                                             });
                                                       } else {
                                                         Get.snackbar('Error',
@@ -318,6 +324,9 @@ class InputPageView extends GetView<InputPageController> {
         Text(label, style: AppTypography.bodyMediumBold),
         const SizedBox(height: 8),
         TextField(
+          controller: label == 'Inputkan Nama Kegiatan'
+              ? controller.namaKegiatanController
+              : null,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,

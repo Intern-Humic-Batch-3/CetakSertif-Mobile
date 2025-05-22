@@ -11,6 +11,7 @@ abstract class Routes {
   static const HASIL_PENGGUNA = _Paths.HASIL_PENGGUNA;
   static const DAFTAR_USER_PAGE = _Paths.DAFTAR_USER_PAGE;
   static const RESULT_PAGE = _Paths.RESULT_PAGE;
+  static const CERTIFICATE_PREVIEW = _Paths.CERTIFICATE_PREVIEW;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const HASIL_PENGGUNA = '/hasil-pengguna';
   static const DAFTAR_USER_PAGE = '/daftar-user-page';
   static const RESULT_PAGE = '/result-page';
+  static const CERTIFICATE_PREVIEW = '/certificate-preview';
 }

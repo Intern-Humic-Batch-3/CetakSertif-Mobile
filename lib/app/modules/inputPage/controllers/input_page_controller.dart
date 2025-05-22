@@ -12,6 +12,16 @@ class InputPageController extends GetxController {
   final selectedTTD2FileName = ''.obs;
   final selectedTTD3FileName = ''.obs;
 
+  // Tambahkan controller untuk nama kegiatan
+  final namaKegiatanController = TextEditingController();
+
+  @override
+  void onClose() {
+    // Dispose controller untuk mencegah memory leak
+    namaKegiatanController.dispose();
+    super.onClose();
+  }
+
   Future<void> pickExcelFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -29,6 +39,16 @@ class InputPageController extends GetxController {
       Get.snackbar(
         'Error',
         'Silakan pilih file Excel terlebih dahulu',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    // Tambahkan pengecekan untuk memastikan semua data yang diperlukan tersedia
+    if (namaKegiatanController.text.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Silakan isi nama kegiatan terlebih dahulu',
         snackPosition: SnackPosition.BOTTOM,
       );
       return;

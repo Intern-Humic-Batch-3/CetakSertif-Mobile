@@ -15,6 +15,8 @@ import '../modules/template_humic/bindings/template_humic_binding.dart';
 import '../modules/template_humic/views/template_humic_view.dart';
 import '../modules/result_page/bindings/result_page_binding.dart';
 import '../modules/result_page/views/result_page_view.dart';
+import '../modules/certificate_preview/bindings/certificate_preview_binding.dart';
+import '../modules/certificate_preview/views/certificate_preview_view.dart';
 
 part 'app_routes.dart';
 
@@ -63,6 +65,11 @@ class AppPages {
       name: _Paths.RESULT_PAGE,
       page: () => const ResultPageView(),
       binding: ResultPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.CERTIFICATE_PREVIEW,
+      page: () => const CertificatePreviewView(),
+      binding: CertificatePreviewBinding(),
     ),
   ];
 }
