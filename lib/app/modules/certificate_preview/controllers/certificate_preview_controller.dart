@@ -7,6 +7,9 @@ import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
+import 'package:archive/archive.dart';
+import 'package:archive/archive_io.dart';
+import 'package:file_saver/file_saver.dart';
 
 class CertificatePreviewController extends GetxController {
   RxString firstCertificateName = ''.obs;
@@ -166,6 +169,115 @@ class CertificatePreviewController extends GetxController {
       print("Error generating certificate: $e");
       Get.snackbar('Error', 'Gagal membuat sertifikat: $e');
       return null;
+    }
+  }
+
+  Future<void> downloadAsZip() async {
+    try {
+      isLoading.value = true;
+      Get.snackbar(
+        'Info',
+        'Mempersiapkan file untuk diunduh...',
+        backgroundColor: Colors.blue,
+        colorText: Colors.white,
+      );
+      
+      // Baca data Excel
+      final bytes = File(excelFilePath.value).readAsBytesSync();
+      final excel = Excel.decodeBytes(bytes);
+      
+      // Ambil sheet pertama
+      final sheet = excel.tables.keys.first;
+      final rows = excel.tables[sheet]?.rows;
+      
+      if (rows == null || rows.isEmpty) {
+        throw Exception('Data Excel kosong');
+      }
+      
+      // Buat archive
+      final archive = Archive();
+      final tempDir = await getTemporaryDirectory();
+      
+      // Tambahkan file sertifikat untuk setiap nama di Excel
+      for (int i = 0; i < rows.length; i++) {
+        if (rows[i].isNotEmpty && rows[i][0]?.value != null) {
+          final name = rows[i][0]!.value.toString();
+          final certificateFile = await generateCertificate(name);
+          
+          if (certificateFile != null) {
+            final fileBytes = await certificateFile.readAsBytes();
+            final archiveFile = ArchiveFile(
+              '$name-certificate.png', 
+              fileBytes.length, 
+              fileBytes
+            );
+            archive.addFile(archiveFile);
+          }
+        }
+      }
+      
+      // Encode archive ke bytes
+      final zipEncoder = ZipEncoder();
+      final zipData = zipEncoder.encode(archive);
+      
+      if (zipData == null) {
+        throw Exception('Gagal membuat file ZIP');
+      }
+      
+      // Tentukan lokasi penyimpanan berdasarkan platform
+      String savePath = '';
+      String fileName = '${activityName.value.replaceAll(' ', '_')}_certificates.zip';
+      
+      if (Platform.isAndroid) {
+        // Untuk Android, simpan ke folder Download
+        final downloadDir = Directory('/storage/emulated/0/Download/Humic');
+        if (!await downloadDir.exists()) {
+          await downloadDir.create(recursive: true);
+        }
+        savePath = '${downloadDir.path}/$fileName';
+        
+        // Simpan file
+        final file = File(savePath);
+        await file.writeAsBytes(zipData);
+        
+        // Beri tahu galeri tentang file baru
+        try {
+          final mediaScanIntent = MethodChannel('com.humic.app/media_scanner');
+          await mediaScanIntent.invokeMethod('scanFile', {'path': savePath});
+        } catch (e) {
+          print("Error scanning file: $e");
+          // Lanjutkan meskipun gagal scan file
+        }
+      } else {
+        // Untuk platform lain, gunakan file_saver
+        await FileSaver.instance.saveFile(
+          name: fileName.split('.').first,
+          bytes: Uint8List.fromList(zipData),
+          ext: 'zip',
+          mimeType: MimeType.zip
+        );
+        
+        // Untuk Windows/macOS/iOS, file_saver akan menampilkan dialog save
+        savePath = 'folder yang Anda pilih di dialog penyimpanan';
+      }
+      
+      Get.snackbar(
+        'Sukses',
+        'File sertifikat berhasil diunduh ke: $savePath',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        duration: Duration(seconds: 5),
+      );
+    } catch (e) {
+      print("Error downloading certificates: $e");
+      Get.snackbar(
+        'Error',
+        'Gagal mengunduh sertifikat: $e',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
 

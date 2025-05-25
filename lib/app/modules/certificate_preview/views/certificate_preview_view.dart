@@ -132,16 +132,11 @@ class CertificatePreviewView extends GetView<CertificatePreviewController> {
                                               ListTile(
                                                 leading:
                                                     const Icon(Icons.download),
-                                                title: const Text('Unduh'),
+                                                title:
+                                                    const Text('Unduh (ZIP)'),
                                                 onTap: () {
                                                   Navigator.pop(context);
-                                                  Get.snackbar(
-                                                    'Info',
-                                                    'Fitur unduh akan segera tersedia',
-                                                    backgroundColor:
-                                                        Colors.blue,
-                                                    colorText: Colors.white,
-                                                  );
+                                                  controller.downloadAsZip();
                                                 },
                                               ),
                                             ],
