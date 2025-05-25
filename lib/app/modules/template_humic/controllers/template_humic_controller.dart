@@ -34,8 +34,11 @@ class TemplateHumicController extends GetxController {
       case 2:
         emptyTemplatePath = 'assets/images/sertif-kosong-2.png';
         break;
+      case 3:
+        emptyTemplatePath = 'assets/images/sertif-kosong-3.png';
+        break;
       default:
-        emptyTemplatePath = 'assets/images/sertif-kosong-1.png';
+        emptyTemplatePath = 'assets/images/sertif-kosong-2.png';
     }
 
     print("Path template kosong: $emptyTemplatePath");

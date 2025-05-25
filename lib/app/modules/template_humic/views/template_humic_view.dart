@@ -58,14 +58,14 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
 
               const SizedBox(height: 30),
 
-              // // Template 3
-              // _buildTemplateItem(
-              //   context,
-              //   "Template Humic Sertifikat",
-              //   "assets/images/sertif-template-3.png",
-              //   () => controller.Gunakan(
-              //       templateIndex: 3, excelFilePath: excelFilePath),
-              // ),
+              // Template 3
+              _buildTemplateItem(
+                context,
+                "Template Humic Sertifikat",
+                "assets/images/sertif-kosong-3.png",
+                () => controller.Gunakan(
+                    templateIndex: 3, excelFilePath: excelFilePath),
+              ),
 
               const SizedBox(height: 20),
             ],

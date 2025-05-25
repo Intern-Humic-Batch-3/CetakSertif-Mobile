@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:excel/excel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:humic_mobile/app/data/models/certificate_model.dart';
 import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:ui' as ui;
@@ -64,11 +64,27 @@ class CertificatePreviewController extends GetxController {
   Future<File?> generateCertificate(String name) async {
     try {
       // Muat gambar template
-      final ByteData data = await rootBundle.load(templatePath.value);
-      final Uint8List bytes = data.buffer.asUint8List();
-      final ui.Codec codec = await ui.instantiateImageCodec(bytes);
-      final ui.FrameInfo fi = await codec.getNextFrame();
-      final ui.Image templateImage = fi.image;
+      ui.Image templateImage;
+
+      if (templatePath.value.startsWith('http')) {
+        // Jika path adalah URL, gunakan NetworkImage
+        final HttpClient httpClient = HttpClient();
+        final Uri uri = Uri.parse(templatePath.value);
+        final HttpClientRequest request = await httpClient.getUrl(uri);
+        final HttpClientResponse response = await request.close();
+        final Uint8List bytes =
+            await consolidateHttpClientResponseBytes(response);
+        final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+        final ui.FrameInfo fi = await codec.getNextFrame();
+        templateImage = fi.image;
+      } else {
+        // Jika path adalah aset lokal, gunakan rootBundle
+        final ByteData data = await rootBundle.load(templatePath.value);
+        final Uint8List bytes = data.buffer.asUint8List();
+        final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+        final ui.FrameInfo fi = await codec.getNextFrame();
+        templateImage = fi.image;
+      }
 
       // Buat canvas untuk menggambar
       final recorder = ui.PictureRecorder();
@@ -79,14 +95,14 @@ class CertificatePreviewController extends GetxController {
 
       // Tambahkan nama dengan font Great Vibes
       final textStyle = ui.TextStyle(
-        color: Colors.black,
+        color: templateIndex.value == 1 ? Colors.red : Colors.black,
         fontSize: 100,
         fontWeight: FontWeight.normal,
         fontFamily: 'Great Vibes',
       );
 
       final paragraphStyle = ui.ParagraphStyle(
-        textAlign: TextAlign.center,
+        textAlign: templateIndex.value == 1 ? TextAlign.left : TextAlign.center,
         fontSize: 100,
         fontFamily: 'Great Vibes',
       );
@@ -106,7 +122,7 @@ class CertificatePreviewController extends GetxController {
       switch (templateIndex.value) {
         case 1:
           // Posisi untuk template 1
-          x = (templateImage.width - paragraph.width) / 2;
+          x = templateImage.width * 0.33;
           y = templateImage.height * 0.45;
           break;
         case 2:
@@ -114,6 +130,11 @@ class CertificatePreviewController extends GetxController {
           x = (templateImage.width - paragraph.width) / 2;
           y = templateImage.height * 0.43;
           break;
+        case 3:
+          // Posisi untuk template 3
+          x = (templateImage.width - paragraph.width) / 2;
+
+          y = templateImage.height * 0.45;
         default:
           // Posisi default
           x = (templateImage.width - paragraph.width) / 2;

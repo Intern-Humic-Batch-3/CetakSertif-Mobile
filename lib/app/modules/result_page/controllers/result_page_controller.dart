@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:excel/excel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:humic_mobile/app/data/models/certificate_model.dart';
@@ -61,11 +62,26 @@ class ResultPageController extends GetxController {
   Future<ui.Image> loadTemplateImage() async {
     try {
       print("Loading template from: ${templatePath.value}");
-      final ByteData data = await rootBundle.load(templatePath.value);
-      final Uint8List bytes = data.buffer.asUint8List();
-      final ui.Codec codec = await ui.instantiateImageCodec(bytes);
-      final ui.FrameInfo fi = await codec.getNextFrame();
-      return fi.image;
+
+      if (templatePath.value.startsWith('http')) {
+        // Jika path adalah URL, gunakan NetworkImage
+        final HttpClient httpClient = HttpClient();
+        final Uri uri = Uri.parse(templatePath.value);
+        final HttpClientRequest request = await httpClient.getUrl(uri);
+        final HttpClientResponse response = await request.close();
+        final Uint8List bytes =
+            await consolidateHttpClientResponseBytes(response);
+        final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+        final ui.FrameInfo fi = await codec.getNextFrame();
+        return fi.image;
+      } else {
+        // Jika path adalah aset lokal, gunakan rootBundle
+        final ByteData data = await rootBundle.load(templatePath.value);
+        final Uint8List bytes = data.buffer.asUint8List();
+        final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+        final ui.FrameInfo fi = await codec.getNextFrame();
+        return fi.image;
+      }
     } catch (e) {
       print("Error loading template image: $e");
       Get.snackbar('Error', 'Gagal memuat gambar template: $e');
@@ -93,14 +109,14 @@ class ResultPageController extends GetxController {
 
       // Tambahkan nama dengan font Great Vibes
       final textStyle = ui.TextStyle(
-        color: Colors.black,
+        color: templateIndex.value == 1 ? Colors.red : Colors.black,
         fontSize: 100,
         fontWeight: FontWeight.normal,
         fontFamily: 'Great Vibes',
       );
 
       final paragraphStyle = ui.ParagraphStyle(
-        textAlign: TextAlign.center,
+        textAlign: templateIndex.value == 1 ? TextAlign.left : TextAlign.center,
         fontSize: 100,
         fontFamily: 'Great Vibes',
       );
@@ -120,16 +136,18 @@ class ResultPageController extends GetxController {
       switch (templateIndex.value) {
         case 1:
           // Posisi untuk template 1
-          x = (templateImage.width - paragraph.width) / 2;
-          y = templateImage.height *
-              0.45; // Sesuaikan posisi Y untuk template 1
+          x = templateImage.width * 0.33;
+          y = templateImage.height * 0.45;
           break;
         case 2:
           // Posisi untuk template 2
           x = (templateImage.width - paragraph.width) / 2;
-          y = templateImage.height *
-              0.43; // Sesuaikan posisi Y untuk template 2
+          y = templateImage.height * 0.43;
           break;
+        case 3:
+          // Posisi untuk template 3
+          x = (templateImage.width - paragraph.width) / 2;
+          y = templateImage.height * 0.45;
         default:
           // Posisi default
           x = (templateImage.width - paragraph.width) / 2;

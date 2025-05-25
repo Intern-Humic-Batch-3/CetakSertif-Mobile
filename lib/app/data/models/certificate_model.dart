@@ -8,6 +8,5 @@ class Certificate {
       {required this.name,
       required this.templatePath,
       required this.templateIndex,
-      this.fontFamily = 'Great Vibes'
-  });
+      this.fontFamily = 'Great Vibes'});
 }

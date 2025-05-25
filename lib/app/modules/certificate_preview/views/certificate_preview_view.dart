@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
+import 'package:humic_mobile/app/modules/certificate_preview/controllers/certificate_preview_controller.dart';
 import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
 import 'package:humic_mobile/app/widgets/custom_drawer.dart';
 import 'package:humic_mobile/app/data/controllers/user_controllers.dart';
-import '../controllers/certificate_preview_controller.dart';
 
 class CertificatePreviewView extends GetView<CertificatePreviewController> {
   const CertificatePreviewView({Key? key}) : super(key: key);

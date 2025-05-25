@@ -1,16 +1,8 @@
 import 'package:get/get.dart';
 
 class ApiConfig {
-  // Buat variabel reaktif untuk menyimpan base URL
-  static final RxString _baseUrl = 'http://192.168.18.4:4000'.obs;
-
-  // Getter untuk mendapatkan base URL saat ini
-  static String get baseUrl => _baseUrl.value;
-
-  // Setter untuk mengubah base URL
-  static void setBaseUrl(String url) {
-    _baseUrl.value = url;
-  }
+  // Ubah baseUrl dari localhost ke server yang sudah di-deploy
+  static const String baseUrl = 'http://52.229.206.42:4001';
 
   // Endpoint untuk auth
   static String get loginUrl => '$baseUrl/api-auth/post/login';
@@ -19,4 +11,11 @@ class ApiConfig {
 
   // Endpoint untuk user
   static String get getAllUsersUrl => '$baseUrl/api-user/get/allUser';
+
+  // Endpoint untuk sertifikat
+  static String get getAllTemplatesUrl =>
+      '$baseUrl/api-sertifikat/get/allTemplate';
+  static String get addTemplateUrl => '$baseUrl/api-sertifikat/post/template';
+  static String get deleteTemplateUrl =>
+      '$baseUrl/api-sertifikat/delete/template';
 }
