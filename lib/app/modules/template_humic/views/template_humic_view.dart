@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
+import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
 import 'package:humic_mobile/app/widgets/custom_drawer.dart';
 import 'package:humic_mobile/app/widgets/custom_header_input.dart';
@@ -35,7 +36,7 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
               const SizedBox(height: 20),
               const CustomInputHeader(showBackButton: true),
               const SizedBox(height: 30),
-              
+
               // Judul untuk Template Custom
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
@@ -47,8 +48,8 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              
-              // Template Custom dari Server
+
+              // Template Custom dari Server dalam Grid
               Obx(() => controller.templates.isEmpty
                   ? const Center(
                       child: Padding(
@@ -56,34 +57,34 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
                         child: Text("Tidak ada template custom"),
                       ),
                     )
-                  : Column(
-                      children: controller.templates.map((template) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 30.0),
-                          child: _buildServerTemplateItem(
-                            context,
-                            template.name,
-                            template.imageUrl,
-                            () => controller.Gunakan(
-                              templateIndex: 0, // Gunakan 0 untuk template custom
-                              excelFilePath: excelFilePath,
-                            ),
-                          ),
+                  : GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.75,
+                      ),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: controller.templates.length,
+                      itemBuilder: (context, index) {
+                        final template = controller.templates[index];
+                        return _buildServerTemplateItemGrid(
+                          context,
+                          template.name,
+                          template.imageUrl,
+                          () => Get.toNamed(Routes.INPUT_PAGE, arguments: {
+                            'templateIndex': 0, // 0 untuk template custom
+                            'templateUrl': template.imageUrl,
+                            'customTemplateIndex': index,
+                          }),
+                          templateId: template.id, // Tambahkan ID template
                         );
-                      }).toList(),
+                      },
                     )),
-              
-              // Judul untuk Template Bawaan
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  "Template Bawaan",
-                  style: AppTypography.h4SemiBold.copyWith(
-                    color: AppColors.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+
+              const SizedBox(height: 30),
 
               // Template 1
               _buildTemplateItem(
@@ -135,90 +136,131 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
     );
   }
 
-  // Widget untuk menampilkan template dari server
-  Widget _buildServerTemplateItem(BuildContext context, String title,
-      String imageUrl, VoidCallback onUseTemplate) {
-    return Column(
-      children: [
-        Text(
-          title,
-          style: AppTypography.h5SemiBold.copyWith(
-              color: AppColors.primary,
-              backgroundColor: AppColors.cardBackground),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/LogoHumic.png',
-              width: 50,
-              height: 50,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              "CoE Humic Engineering Research Center",
-              style: AppTypography.bodyMediumSemiBold.copyWith(),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
+  // Widget untuk menampilkan template dari server dalam grid
+  Widget _buildServerTemplateItemGrid(BuildContext context, String title,
+      String imageUrl, VoidCallback onUseTemplate,
+      {required int templateId}) {
+    final userController = Get.find<UserController>();
 
-        // Gambar Sertifikat dari URL
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 2),
-          ),
-          child: Image.network(
-            imageUrl,
-            width: 300,
-            height: 200,
-            fit: BoxFit.cover,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return SizedBox(
-                width: 300,
-                height: 200,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Header dengan judul dan ikon hapus
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title, // Menggunakan nama template dari server
+                    style: AppTypography.bodyMediumSemiBold.copyWith(
+                      color: AppColors.primary,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return SizedBox(
-                width: 300,
-                height: 200,
-                child: Center(
-                  child: Icon(Icons.error, color: Colors.red),
-                ),
-              );
-            },
-          ),
-        ),
-
-        const SizedBox(height: 16),
-
-        // Tombol Gunakan Template
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(250, 48),
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+                // Ikon hapus hanya untuk admin
+                if (userController.isAdmin.value)
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      // Konfirmasi penghapusan
+                      Get.dialog(
+                        AlertDialog(
+                          title: const Text('Konfirmasi'),
+                          content: const Text(
+                              'Apakah Anda yakin ingin menghapus template ini?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              child: const Text('Batal'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                                controller.deleteTemplate(templateId);
+                              },
+                              child: const Text('Hapus'),
+                              style: TextButton.styleFrom(
+                                  foregroundColor: Colors.red),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+              ],
             ),
           ),
-          onPressed: onUseTemplate,
-          child: const Text("Gunakan Template Ini"),
-        ),
-      ],
+          const SizedBox(height: 8),
+          // Logo Humic
+          Image.asset(
+            'assets/images/LogoHumic.png',
+            width: 30,
+            height: 30,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 8),
+
+          // Gambar Sertifikat dari URL
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(7),
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(
+                      child: Icon(Icons.error, color: Colors.red),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+
+          // Tombol Gunakan Template
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                minimumSize: const Size(double.infinity, 36),
+              ),
+              onPressed: onUseTemplate,
+              child: const Text("Gunakan", style: TextStyle(fontSize: 12)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

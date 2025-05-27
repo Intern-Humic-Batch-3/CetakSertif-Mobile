@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
+import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/modules/certificate_preview/controllers/certificate_preview_controller.dart';
 import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
 import 'package:humic_mobile/app/widgets/custom_drawer.dart';
@@ -25,9 +26,21 @@ class CertificatePreviewView extends GetView<CertificatePreviewController> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Menghapus bagian header dengan teks "Preview Sertifikat" dan ikon kembali
+            // Judul kegiatan
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0, top: 20.0),
+              child: Text(
+                controller.activityName.value,
+                style: AppTypography.h5SemiBold,
+                textAlign: TextAlign.center,
+              ),
+            ),
+
+            // Spacer untuk mendorong konten ke bawah
+            const SizedBox(height: 80),
+
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
@@ -49,107 +62,72 @@ class CertificatePreviewView extends GetView<CertificatePreviewController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Preview sertifikat dalam grid
-                      GridView.count(
-                        crossAxisCount: 2,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        childAspectRatio: 0.75,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        children: [
-                          // Item sertifikat
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Sertifikat
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    // Navigasi ke halaman semua sertifikat ketika sertifikat diklik
-                                    Get.toNamed('/result-page', arguments: {
-                                      'excelFilePath':
-                                          controller.excelFilePath.value,
-                                      'emptyTemplatePath':
-                                          controller.templatePath.value,
-                                      'templateIndex':
-                                          controller.templateIndex.value,
-                                    });
-                                  },
-                                  child: Card(
-                                    elevation: 2,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.file(
-                                        controller.previewFile.value!,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                      // Teks petunjuk
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Text(
+                          "Klik sertifikat untuk melihat semua",
+                          style: AppTypography.bodyMediumRegular.copyWith(
+                            color: AppColors.textSecondary,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
 
-                              // Nama kegiatan dan ikon titik tiga
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        controller.activityName.value,
-                                        style: AppTypography.bodyMediumSemiBold,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon:
-                                          const Icon(Icons.more_vert, size: 20),
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(),
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          builder: (context) => Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16.0),
-                                                child: Text(
-                                                  controller.activityName.value,
-                                                  style: AppTypography
-                                                      .bodyLargeBold,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              const Divider(),
-                                              ListTile(
-                                                leading:
-                                                    const Icon(Icons.download),
-                                                title:
-                                                    const Text('Unduh (ZIP)'),
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  controller.downloadAsZip();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                      // Sertifikat di tengah dengan ukuran besar
+                      GestureDetector(
+                        onTap: () {
+                          // Navigasi ke halaman semua sertifikat ketika sertifikat diklik
+                          Get.toNamed('/result-page', arguments: {
+                            'excelFilePath': controller.excelFilePath.value,
+                            'emptyTemplatePath': controller.templatePath.value,
+                            'templateIndex': controller.templateIndex.value,
+                          });
+                        },
+                        child: Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.9,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 1),
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 1,
+                                blurRadius: 3,
+                                offset: const Offset(0, 2),
                               ),
                             ],
                           ),
-                        ],
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(7),
+                            child: Image.file(
+                              controller.previewFile.value!,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Tombol download di bawah sertifikat
+                      Padding(
+                        padding: const EdgeInsets.only(top: 32.0),
+                        child: ElevatedButton.icon(
+                          onPressed: controller.downloadAsZip,
+                          icon: const Icon(Icons.download),
+                          label: const Text('Unduh Semua (ZIP)'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),

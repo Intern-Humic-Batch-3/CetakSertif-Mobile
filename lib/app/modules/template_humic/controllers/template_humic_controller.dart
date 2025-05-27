@@ -39,20 +39,38 @@ class TemplateHumicController extends GetxController {
 
     String emptyTemplatePath = '';
     String? templateUrl;
+    int actualTemplateIndex = templateIndex;
 
-    if (templateIndex == 0 && selectedTemplateIndex.value < templates.length) {
-      // Template custom dari server
-      templateUrl = templates[selectedTemplateIndex.value].imageUrl;
-      print("URL template custom: $templateUrl");
+    // Jika templateIndex adalah 0, berarti ini adalah template custom
+    if (templateIndex == 0) {
+      // Pastikan ada template yang dipilih dari daftar
+      int customTemplateIndex = Get.arguments?['customTemplateIndex'] ?? 0;
 
-      Get.toNamed(Routes.INPUT_PAGE, arguments: {
-        'templateIndex': templateIndex,
-        'templateUrl': templateUrl
-      });
+      if (customTemplateIndex < templates.length) {
+        Template selectedTemplate = templates[customTemplateIndex];
+        templateUrl = selectedTemplate.imageUrl;
+        // Gunakan categoryIndex dari template custom
+        actualTemplateIndex = selectedTemplate.categoryIndex;
+        print(
+            "URL template custom: $templateUrl, Category Index: $actualTemplateIndex");
+
+        Get.toNamed(Routes.INPUT_PAGE, arguments: {
+          'templateIndex':
+              actualTemplateIndex, // Gunakan index kategori yang sesuai
+          'templateUrl': templateUrl
+        });
+      } else {
+        Get.snackbar(
+          'Error',
+          'Template tidak ditemukan',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
       return;
     }
 
-    // Template bawaan
+    // Template bawaan - kode yang sudah ada
     switch (templateIndex) {
       case 1:
         emptyTemplatePath = 'assets/images/sertif-kosong-1.png';
@@ -150,6 +168,22 @@ class TemplateHumicController extends GetxController {
         'Accept': 'application/json',
       });
 
+      // Tambahkan informasi kategori
+      int categoryIndex = 1; // Default: Merah-Putih
+
+      // Konversi kategori ke index
+      if (selectedCategory.value == "Merah-Putih") {
+        categoryIndex = 1;
+      } else if (selectedCategory.value == "Merah-Abu") {
+        categoryIndex = 2;
+      } else if (selectedCategory.value == "Merah-Hitam") {
+        categoryIndex = 3;
+      }
+
+      // Tambahkan field kategori ke request
+      request.fields['category_index'] = categoryIndex.toString();
+      request.fields['name'] = selectedCategory.value;
+
       // Periksa ekstensi file untuk menentukan MIME type
       String fileName =
           selectedFile.value!.path.split(Platform.isWindows ? '\\' : '/').last;
@@ -208,24 +242,104 @@ class TemplateHumicController extends GetxController {
     }
   }
 
-  Future<void> fetchTemplates() async {
+  Future<void> deleteTemplate(int templateId) async {
     try {
-      // Lakukan permintaan GET ke API
-      final response = await http.get(Uri.parse(ApiConfig.getAllTemplatesUrl));
+      // Dapatkan token dari SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      if (token == null) {
+        throw Exception('Token tidak ditemukan');
+      }
+
+      // Lakukan permintaan DELETE ke API dengan header Authorization
+      final response = await http.delete(
+        Uri.parse('${ApiConfig.deleteTemplateUrl}/$templateId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        // Parsing response dan menyimpan data ke dalam list template
-        templates.value = data.map((e) => Template.fromJson(e)).toList();
+        Get.snackbar(
+          'Sukses',
+          'Template berhasil dihapus',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        // Refresh daftar template
+        fetchTemplates();
       } else {
+        print('Error status code: ${response.statusCode}');
+        print('Error response: ${response.body}');
         Get.snackbar(
           'Error',
-          'Gagal mengambil template',
+          'Gagal menghapus template: ${response.statusCode}',
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
       }
     } catch (e) {
+      print('Exception: $e');
+      Get.snackbar(
+        'Error',
+        'Terjadi kesalahan: $e',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  Future<void> fetchTemplates() async {
+    try {
+      // Dapatkan token dari SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      if (token == null) {
+        throw Exception('Token tidak ditemukan');
+      }
+
+      // Lakukan permintaan GET ke API dengan header Authorization
+      final response = await http.get(
+        Uri.parse(ApiConfig.getAllTemplatesUrl),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parsing response JSON
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        // Debug: Cetak respons untuk melihat struktur data
+        print('Response data: $responseData');
+
+        // Periksa apakah ada data dalam respons
+        if (responseData.containsKey('data') && responseData['data'] is List) {
+          final List<dynamic> data = responseData['data'];
+          // Parsing response dan menyimpan data ke dalam list template
+          templates.value = data.map((e) => Template.fromJson(e)).toList();
+          print('Templates loaded: ${templates.length}');
+        } else {
+          print(
+              'Response tidak memiliki format yang diharapkan: $responseData');
+          templates.value = [];
+        }
+      } else {
+        print('Error status code: ${response.statusCode}');
+        print('Error response: ${response.body}');
+        Get.snackbar(
+          'Error',
+          'Gagal mengambil template: ${response.statusCode}',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      print('Exception: $e');
       Get.snackbar(
         'Error',
         'Terjadi kesalahan: $e',
@@ -239,13 +353,39 @@ class TemplateHumicController extends GetxController {
 class Template {
   final String name;
   final String imageUrl;
+  final int id;
+  final int categoryIndex; // Tambahkan field untuk kategori
 
-  Template({required this.name, required this.imageUrl});
+  Template(
+      {required this.name,
+      required this.imageUrl,
+      required this.id,
+      required this.categoryIndex});
 
   factory Template.fromJson(Map<String, dynamic> json) {
+    // Konversi category_index ke nama kategori yang lebih deskriptif
+    String templateName;
+    int categoryIdx = json['category_index'] ?? 0;
+
+    switch (categoryIdx) {
+      case 1:
+        templateName = 'Template Merah-Putih';
+        break;
+      case 2:
+        templateName = 'Template Merah-Abu';
+        break;
+      case 3:
+        templateName = 'Template Merah-Hitam';
+        break;
+      default:
+        templateName = 'Template Custom';
+    }
+
     return Template(
-      name: json['name'] ?? 'Unknown',
-      imageUrl: json['imageUrl'] ?? '',
+      id: json['id'] ?? 0,
+      name: templateName, // Gunakan nama berdasarkan kategori
+      imageUrl: json['img_path'] ?? '',
+      categoryIndex: categoryIdx,
     );
   }
 }
