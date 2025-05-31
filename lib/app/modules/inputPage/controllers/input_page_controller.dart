@@ -72,17 +72,17 @@ class InputPageController extends GetxController {
     // Ambil argumen dari halaman sebelumnya
     final args = Get.arguments;
     final templateIndex = args?['templateIndex'] ?? 1;
-    final emptyTemplatePath =
-        args?['emptyTemplatePath'] ?? 'assets/images/sertif-kosong-1.png';
+    final emptyTemplatePath = args?['emptyTemplatePath'] ?? 'assets/images/sertif-kosong-1.png';
+    final categoryIndex = args?['categoryIndex'] ?? templateIndex; // Ambil categoryIndex
 
-    print(
-        "Navigasi ke Result Page dengan template: $templateIndex, path: $emptyTemplatePath");
+    print("Navigasi ke Result Page dengan template: $templateIndex, path: $emptyTemplatePath, category: $categoryIndex");
 
     // Teruskan ke halaman result
     Get.toNamed(Routes.RESULT_PAGE, arguments: {
       'excelFilePath': selectedExcelFilePath.value,
       'templateIndex': templateIndex,
-      'emptyTemplatePath': emptyTemplatePath
+      'emptyTemplatePath': emptyTemplatePath,
+      'categoryIndex': categoryIndex // Teruskan categoryIndex
     });
   }
 }

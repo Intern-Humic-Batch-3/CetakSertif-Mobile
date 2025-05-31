@@ -78,11 +78,12 @@ class CertificatePreviewView extends GetView<CertificatePreviewController> {
                       // Sertifikat di tengah dengan ukuran besar
                       GestureDetector(
                         onTap: () {
-                          // Navigasi ke halaman semua sertifikat ketika sertifikat diklik
+                          // Dalam GestureDetector onTap
                           Get.toNamed('/result-page', arguments: {
                             'excelFilePath': controller.excelFilePath.value,
                             'emptyTemplatePath': controller.templatePath.value,
                             'templateIndex': controller.templateIndex.value,
+                            'categoryIndex': controller.categoryIndex.value, // Tambahkan ini
                           });
                         },
                         child: Container(

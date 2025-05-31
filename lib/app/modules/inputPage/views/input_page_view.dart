@@ -247,6 +247,7 @@ class InputPageView extends GetView<InputPageController> {
                                                           .value
                                                           .isNotEmpty) {
                                                         // Ambil argumen dari halaman sebelumnya
+                                                        // Dalam onPressed dialog sukses
                                                         final args =
                                                             Get.arguments;
                                                         final templateIndex =
@@ -255,8 +256,11 @@ class InputPageView extends GetView<InputPageController> {
                                                         final emptyTemplatePath =
                                                             args?['emptyTemplatePath'] ??
                                                                 'assets/images/sertif-kosong-1.png';
+                                                        final categoryIndex = args?[
+                                                                'categoryIndex'] ??
+                                                            templateIndex; // Ambil categoryIndex
 
-                                                        // Ubah navigasi ke halaman preview
+// Ubah navigasi ke halaman preview
                                                         Get.toNamed(
                                                             Routes
                                                                 .CERTIFICATE_PREVIEW,
@@ -269,6 +273,8 @@ class InputPageView extends GetView<InputPageController> {
                                                                   emptyTemplatePath,
                                                               'templateIndex':
                                                                   templateIndex,
+                                                              'categoryIndex':
+                                                                  categoryIndex, // Tambahkan parameter kategori
                                                               'activityName':
                                                                   controller
                                                                       .namaKegiatanController

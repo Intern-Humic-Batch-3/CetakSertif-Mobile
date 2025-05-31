@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:humic_mobile/app/constants/typography.dart';
-import 'package:humic_mobile/app/routes/app_pages.dart';
 import 'package:humic_mobile/app/widgets/custom_app_bar.dart';
 import 'package:humic_mobile/app/widgets/custom_drawer.dart';
 import 'package:humic_mobile/app/widgets/custom_header_input.dart';
@@ -50,39 +49,43 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
               ),
 
               // Template Custom dari Server dalam Grid
-              Obx(() => controller.templates.isEmpty
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text("Tidak ada template custom"),
-                      ),
-                    )
-                  : GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        childAspectRatio: 0.75,
-                      ),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.templates.length,
-                      itemBuilder: (context, index) {
-                        final template = controller.templates[index];
-                        return _buildServerTemplateItemGrid(
-                          context,
-                          template.name,
-                          template.imageUrl,
-                          () => Get.toNamed(Routes.INPUT_PAGE, arguments: {
-                            'templateIndex': 0, // 0 untuk template custom
-                            'templateUrl': template.imageUrl,
-                            'customTemplateIndex': index,
-                          }),
-                          templateId: template.id, // Tambahkan ID template
-                        );
-                      },
-                    )),
+              Obx(() {
+                // Refresh templates saat build untuk memastikan data terbaru
+                if (controller.templates.isEmpty) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text("Tidak ada template custom"),
+                    ),
+                  );
+                } else {
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 0.75,
+                    ),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.templates.length,
+                    itemBuilder: (context, index) {
+                      final template = controller.templates[index];
+                      return _buildServerTemplateItemGrid(
+                        context,
+                        template.name,
+                        template.imageUrl,
+                        () => controller.Gunakan(
+                          templateIndex: 0, // 0 untuk template custom
+                          excelFilePath: excelFilePath,
+                        ),
+                        templateId: template.id, // Tambahkan ID template
+                      );
+                    },
+                  );
+                }
+              }),
 
               const SizedBox(height: 30),
 
@@ -139,12 +142,12 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
   // Widget untuk menampilkan template dari server dalam grid
   Widget _buildServerTemplateItemGrid(BuildContext context, String title,
       String imageUrl, VoidCallback onUseTemplate,
-      {required int templateId}) {
+      {required String templateId}) {
     final userController = Get.find<UserController>();
 
     return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -198,14 +201,6 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
                   ),
               ],
             ),
-          ),
-          const SizedBox(height: 8),
-          // Logo Humic
-          Image.asset(
-            'assets/images/LogoHumic.png',
-            width: 30,
-            height: 30,
-            fit: BoxFit.contain,
           ),
           const SizedBox(height: 8),
 

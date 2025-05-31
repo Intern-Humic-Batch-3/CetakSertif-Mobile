@@ -20,6 +20,9 @@ class CertificatePreviewController extends GetxController {
   RxString activityName = ''.obs;
   Rx<File?> previewFile = Rx<File?>(null);
 
+  // Tambahkan variabel categoryIndex
+  RxInt categoryIndex = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -28,6 +31,25 @@ class CertificatePreviewController extends GetxController {
       excelFilePath.value = args['excelFilePath'] as String;
       templatePath.value = args['emptyTemplatePath'] as String;
       templateIndex.value = args['templateIndex'] as int;
+
+      // Pastikan categoryIndex selalu integer
+      if (args['categoryIndex'] != null) {
+        if (args['categoryIndex'] is int) {
+          categoryIndex.value = args['categoryIndex'] as int;
+        } else {
+          // Jika bukan integer, coba konversi
+          try {
+            categoryIndex.value = int.parse(args['categoryIndex'].toString());
+          } catch (e) {
+            print(
+                "Error parsing categoryIndex: $e, using templateIndex as fallback");
+            categoryIndex.value = templateIndex.value;
+          }
+        }
+      } else {
+        categoryIndex.value = templateIndex.value;
+      }
+
       activityName.value =
           args['activityName'] as String? ?? 'Workshop Humic Engineering';
 
@@ -64,6 +86,7 @@ class CertificatePreviewController extends GetxController {
     }
   }
 
+  // Dalam fungsi generateCertificate, gunakan categoryIndex untuk styling
   Future<File?> generateCertificate(String name) async {
     try {
       // Muat gambar template
@@ -98,14 +121,18 @@ class CertificatePreviewController extends GetxController {
 
       // Tambahkan nama dengan font Great Vibes
       final textStyle = ui.TextStyle(
-        color: templateIndex.value == 1 ? Colors.red : Colors.black,
+        color: categoryIndex.value == 1
+            ? Colors.red
+            : Colors.black, // Gunakan categoryIndex
         fontSize: 100,
         fontWeight: FontWeight.normal,
         fontFamily: 'Great Vibes',
       );
 
       final paragraphStyle = ui.ParagraphStyle(
-        textAlign: templateIndex.value == 1 ? TextAlign.left : TextAlign.center,
+        textAlign: categoryIndex.value == 1
+            ? TextAlign.left
+            : TextAlign.center, // Gunakan categoryIndex
         fontSize: 100,
         fontFamily: 'Great Vibes',
       );
@@ -122,22 +149,23 @@ class CertificatePreviewController extends GetxController {
       double x = 0;
       double y = 0;
 
-      switch (templateIndex.value) {
+      switch (categoryIndex.value) {
+        // Gunakan categoryIndex
         case 1:
-          // Posisi untuk template 1
+          // Posisi untuk template merah-putih
           x = templateImage.width * 0.33;
           y = templateImage.height * 0.45;
           break;
         case 2:
-          // Posisi untuk template 2
+          // Posisi untuk template merah-abu
           x = (templateImage.width - paragraph.width) / 2;
           y = templateImage.height * 0.43;
           break;
         case 3:
-          // Posisi untuk template 3
+          // Posisi untuk template merah-hitam
           x = (templateImage.width - paragraph.width) / 2;
-
           y = templateImage.height * 0.45;
+          break;
         default:
           // Posisi default
           x = (templateImage.width - paragraph.width) / 2;
