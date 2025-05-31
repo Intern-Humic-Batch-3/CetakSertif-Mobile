@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_ALL" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <application
-        android:label="humic_mobile"
+        android:label="Humic Print"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">

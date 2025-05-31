@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:humic_mobile/app/constants/colors.dart';
@@ -37,8 +39,13 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
               const SizedBox(height: 30),
 
               // Judul untuk Template Custom
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.cardBackground,
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Text(
                   "Template Custom",
                   style: AppTypography.h4SemiBold.copyWith(
@@ -48,9 +55,9 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
                 ),
               ),
 
+              const SizedBox(height: 20),
               // Template Custom dari Server dalam Grid
               Obx(() {
-                // Refresh templates saat build untuk memastikan data terbaru
                 if (controller.templates.isEmpty) {
                   return const Center(
                     child: Padding(
@@ -88,7 +95,7 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
                 }
               }),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 50),
 
               // Template 1
               _buildTemplateItem(
@@ -99,7 +106,7 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
                     templateIndex: 1, excelFilePath: excelFilePath),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 50),
 
               // Template 2
               _buildTemplateItem(
@@ -110,7 +117,7 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
                     templateIndex: 2, excelFilePath: excelFilePath),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 50),
 
               // Template 3
               _buildTemplateItem(
@@ -286,11 +293,22 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
               ),
             ),
             const SizedBox(height: 16),
-            Text(
-              "Kategori Template",
-              style: AppTypography.bodyMediumSemiBold.copyWith(
-                color: AppColors.textPrimary,
-              ),
+            Row(
+              children: [
+                Text(
+                  "Kategori Template",
+                  style: AppTypography.bodyMediumSemiBold.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Text(
+                  "(styling posisi nama)",
+                  style: AppTypography.bodyMediumRegular.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             // Dropdown untuk memilih kategori
@@ -333,28 +351,58 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
             ),
             const SizedBox(height: 8),
             // Tombol untuk memilih file
-            InkWell(
-              onTap: controller.pickTemplateFile,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.primary),
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.grey[100],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.upload_file, color: AppColors.primary),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Pilih File Template",
-                      style: AppTypography.bodyMediumBold.copyWith(
-                        color: AppColors.primary,
+            Obx(
+              () => GestureDetector(
+                onTap: controller.pickTemplateFile,
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      // Bagian Kiri: "Chosen File"
+                      Container(
+                        width: 110,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF1F1F1),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Chosen File',
+                          style: AppTypography.bodyMediumRegular
+                              .copyWith(color: Colors.grey[600]),
+                        ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                      // Bagian Kanan: Nama File
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          color: Colors.white,
+                          alignment: Alignment.centerLeft,
+                          child: controller.selectedFile.value != null
+                              ? Text(
+                                  controller.selectedFile.value!.path
+                                      .split(Platform.isWindows ? '\\' : '/')
+                                      .last,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTypography.bodyMediumRegular,
+                                )
+                              : Text(
+                                  'Silakan pilih file',
+                                  style: AppTypography.bodyMediumRegular
+                                      .copyWith(color: Colors.grey[500]),
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -392,14 +440,21 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
       String imagePath, VoidCallback onUseTemplate) {
     return Column(
       children: [
-        Text(
-          title,
-          style: AppTypography.h5SemiBold.copyWith(
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          decoration: BoxDecoration(
+            color: AppColors.cardBackground,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            title,
+            style: AppTypography.h4SemiBold.copyWith(
               color: AppColors.primary,
-              backgroundColor: AppColors.cardBackground),
-          textAlign: TextAlign.center,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

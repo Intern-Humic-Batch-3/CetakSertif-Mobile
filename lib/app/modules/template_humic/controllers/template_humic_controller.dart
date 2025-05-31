@@ -245,7 +245,8 @@ class TemplateHumicController extends GetxController {
     }
   }
 
-  Future<void> deleteTemplate(String templateId) async {  // Ubah parameter dari int menjadi String
+  Future<void> deleteTemplate(String templateId) async {
+    // Ubah parameter dari int menjadi String
     try {
       // Dapatkan token dari SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -361,7 +362,7 @@ class TemplateHumicController extends GetxController {
 class Template {
   final String name;
   final String imageUrl;
-  final String id;  // Ubah dari int menjadi String
+  final String id;
   final int categoryIndex;
 
   Template(
@@ -372,10 +373,9 @@ class Template {
 
   factory Template.fromJson(Map<String, dynamic> json) {
     // Ambil kategori dari respons backend dan konversi ke integer yang sesuai
-    int categoryIdx = 1; // Default: Merah-Putih
+    int categoryIdx = 1;
 
     if (json['kategori'] != null) {
-      // Pastikan kategori dikonversi ke string terlebih dahulu
       String kategoriStr = json['kategori'].toString().toLowerCase().trim();
 
       // Konversi string kategori ke integer
@@ -386,7 +386,6 @@ class Template {
       } else if (kategoriStr == "merah-hitam") {
         categoryIdx = 3;
       } else {
-        // Coba parse jika kategori sudah berupa angka
         try {
           categoryIdx = int.parse(kategoriStr);
         } catch (e) {
@@ -407,7 +406,7 @@ class Template {
     }
 
     return Template(
-      id: json['id']?.toString() ?? '',  // Simpan ID sebagai string
+      id: json['id']?.toString() ?? '', // Simpan ID sebagai string
       name: templateName,
       imageUrl: json['img_path']?.toString() ?? '',
       categoryIndex: categoryIdx,
