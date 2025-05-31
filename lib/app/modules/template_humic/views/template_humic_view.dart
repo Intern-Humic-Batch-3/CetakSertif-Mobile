@@ -77,10 +77,11 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
                         template.name,
                         template.imageUrl,
                         () => controller.Gunakan(
-                          templateIndex: 0, // 0 untuk template custom
+                          templateIndex: 0,
                           excelFilePath: excelFilePath,
+                          customTemplateIndex: index,
                         ),
-                        templateId: template.id, // Tambahkan ID template
+                        templateId: template.id,
                       );
                     },
                   );
