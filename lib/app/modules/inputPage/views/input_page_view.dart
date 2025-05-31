@@ -34,12 +34,6 @@ class InputPageView extends GetView<InputPageController> {
             const CustomInputHeader(showBackButton: true),
 
             const SizedBox(height: 24),
-
-            // // Input Data Sertifikat Title
-            // Text("Inputkan Data Seritifikat",
-            //     style: AppTypography.bodyLargeBold),
-            // const SizedBox(height: 24),
-
             // File Excel
             _buildFilePickerField(
                 "Inputkan File Excel", controller.selectedExcelFileName,
@@ -175,11 +169,7 @@ class InputPageView extends GetView<InputPageController> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Tutup dialog konfirmasi
-
-                                      // Simulasi proses pengiriman data
-                                      // Di sini Anda bisa memanggil fungsi controller untuk mengirim data
+                                      Navigator.of(context).pop();
 
                                       // Tampilkan dialog sukses
                                       showDialog(
@@ -235,9 +225,7 @@ class InputPageView extends GetView<InputPageController> {
                                                     ),
                                                     onPressed: () {
                                                       Navigator.of(context)
-                                                          .pop(); // Tutup dialog sukses
-
-                                                      // Tambahkan logging untuk debug
+                                                          .pop();
                                                       print(
                                                           "Excel File Path: ${controller.selectedExcelFilePath.value}");
 
@@ -246,8 +234,6 @@ class InputPageView extends GetView<InputPageController> {
                                                           .selectedExcelFilePath
                                                           .value
                                                           .isNotEmpty) {
-                                                        // Ambil argumen dari halaman sebelumnya
-                                                        // Dalam onPressed dialog sukses
                                                         final args =
                                                             Get.arguments;
                                                         final templateIndex =
@@ -256,11 +242,9 @@ class InputPageView extends GetView<InputPageController> {
                                                         final emptyTemplatePath =
                                                             args?['emptyTemplatePath'] ??
                                                                 'assets/images/sertif-kosong-1.png';
-                                                        final categoryIndex = args?[
-                                                                'categoryIndex'] ??
-                                                            templateIndex; // Ambil categoryIndex
-
-// Ubah navigasi ke halaman preview
+                                                        final categoryIndex =
+                                                            args?['categoryIndex'] ??
+                                                                templateIndex;
                                                         Get.toNamed(
                                                             Routes
                                                                 .CERTIFICATE_PREVIEW,
@@ -274,7 +258,7 @@ class InputPageView extends GetView<InputPageController> {
                                                               'templateIndex':
                                                                   templateIndex,
                                                               'categoryIndex':
-                                                                  categoryIndex, // Tambahkan parameter kategori
+                                                                  categoryIndex,
                                                               'activityName':
                                                                   controller
                                                                       .namaKegiatanController
@@ -427,9 +411,8 @@ Widget _buildFilePickerField(String label, RxString fileName,
                 allowedExtensions ?? ['jpg', 'png', 'pdf', 'xlsx'],
           );
           if (result != null && result.files.isNotEmpty) {
-            fileName.value = result.files.single.name; // Set nama file
-            controller.selectedExcelFilePath.value =
-                result.files.single.path!; // Set path file
+            fileName.value = result.files.single.name;
+            controller.selectedExcelFilePath.value = result.files.single.path!;
           }
         },
         child: Obx(
@@ -441,11 +424,10 @@ Widget _buildFilePickerField(String label, RxString fileName,
             ),
             child: Row(
               children: [
-                // Bagian Kiri: "Chosen File"
                 Container(
-                  width: 110, // Lebar bagian kiri bisa disesuaikan
+                  width: 110,
                   decoration: const BoxDecoration(
-                      color: Color(0xFFF1F1F1), // Abu-abu muda
+                      color: Color(0xFFF1F1F1),
                       borderRadius: BorderRadius.all(Radius.circular(8))),
                   alignment: Alignment.center,
                   child: Text(
@@ -458,7 +440,6 @@ Widget _buildFilePickerField(String label, RxString fileName,
                   width: 1,
                   color: Colors.grey,
                 ),
-                // Bagian Kanan: Nama File
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -515,7 +496,7 @@ Widget _buildDateField(
             },
           );
           if (pickedDate != null) {
-            dateValue.value = pickedDate; // Simpan DateTime langsung
+            dateValue.value = pickedDate;
           }
         },
         child: Container(

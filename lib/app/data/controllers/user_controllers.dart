@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:humic_mobile/app/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:humic_mobile/app/data/config/api_config.dart';
@@ -17,7 +19,7 @@ class UserController extends GetxController {
     getUserData();
   }
 
-  // Fungsi untuk mengambil data pengguna dari endpoint /get/me
+  // Fungsi mengambil data pengguna
   Future<void> getUserData() async {
     isLoading.value = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -45,7 +47,6 @@ class UserController extends GetxController {
             data['data'][0]['nama_belakang'];
         userEmail.value = data['data'][0]['email'];
 
-        // Tambahkan pengecekan role untuk isAdmin
         isAdmin.value = data['data'][0]['role'] == 'admin';
 
         print(
@@ -71,6 +72,18 @@ class UserController extends GetxController {
     userName.value = '';
     userEmail.value = '';
     isAdmin.value = false;
+
+    // Tampilkan snackbar logout berhasil
+    Get.snackbar(
+      "Logout Berhasil",
+      "Anda telah keluar dari aplikasi",
+      backgroundColor: AppColors.info,
+      colorText: AppColors.putih,
+      snackPosition: SnackPosition.TOP,
+      margin: const EdgeInsets.all(10),
+      borderRadius: 8,
+      duration: const Duration(seconds: 2),
+    );
 
     // Navigasi ke halaman login
     Get.offAllNamed(Routes.LOGIN_PAGE);

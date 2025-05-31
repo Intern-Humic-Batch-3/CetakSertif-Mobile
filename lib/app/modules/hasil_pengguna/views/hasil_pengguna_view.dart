@@ -44,8 +44,7 @@ class HasilPenggunaView extends GetView<HasilPenggunaController> {
                   mainAxisSpacing: 16.0,
                   childAspectRatio: 1.0,
                 ),
-                itemCount:
-                    10, // Jumlah sertifikat (bisa diganti dengan data dari controller)
+                itemCount: 10,
                 itemBuilder: (context, index) {
                   // Menentukan template yang akan digunakan (bergantian)
                   final bool isEvenIndex = index % 2 == 0;

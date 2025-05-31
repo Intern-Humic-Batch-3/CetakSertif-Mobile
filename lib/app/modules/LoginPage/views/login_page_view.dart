@@ -75,8 +75,7 @@ class LoginPageView extends GetView<LoginPageController> {
                             .copyWith(color: AppColors.textPrimary)),
                     const SizedBox(height: 8),
                     TextField(
-                      controller: controller
-                          .emailController, // Menghubungkan controller
+                      controller: controller.emailController,
                       decoration: InputDecoration(
                         hintText: "Masukkan email anda",
                         fillColor: AppColors.putih,
@@ -103,8 +102,7 @@ class LoginPageView extends GetView<LoginPageController> {
                             .copyWith(color: AppColors.textPrimary)),
                     const SizedBox(height: 8),
                     Obx(() => TextField(
-                          controller: controller
-                              .passwordController, // Menghubungkan controller
+                          controller: controller.passwordController,
                           obscureText: controller.isPasswordHidden.value,
                           decoration: InputDecoration(
                             hintText: "Masukkan password anda",

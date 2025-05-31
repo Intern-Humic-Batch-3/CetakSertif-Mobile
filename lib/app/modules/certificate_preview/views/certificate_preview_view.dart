@@ -28,7 +28,6 @@ class CertificatePreviewView extends GetView<CertificatePreviewController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Judul kegiatan
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0, top: 20.0),
               child: Text(
@@ -37,10 +36,7 @@ class CertificatePreviewView extends GetView<CertificatePreviewController> {
                 textAlign: TextAlign.center,
               ),
             ),
-
-            // Spacer untuk mendorong konten ke bawah
             const SizedBox(height: 80),
-
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
@@ -62,7 +58,6 @@ class CertificatePreviewView extends GetView<CertificatePreviewController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Teks petunjuk
                       Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: Text(
@@ -78,12 +73,11 @@ class CertificatePreviewView extends GetView<CertificatePreviewController> {
                       // Sertifikat di tengah dengan ukuran besar
                       GestureDetector(
                         onTap: () {
-                          // Dalam GestureDetector onTap
                           Get.toNamed('/result-page', arguments: {
                             'excelFilePath': controller.excelFilePath.value,
                             'emptyTemplatePath': controller.templatePath.value,
                             'templateIndex': controller.templateIndex.value,
-                            'categoryIndex': controller.categoryIndex.value, // Tambahkan ini
+                            'categoryIndex': controller.categoryIndex.value,
                           });
                         },
                         child: Container(

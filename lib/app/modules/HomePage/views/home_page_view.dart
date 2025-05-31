@@ -35,7 +35,6 @@ class HomePageView extends GetView<HomePageController> {
               showBackButton: true,
               backRoute: Routes.ADMIN_PAGE,
             ),
-
             const SizedBox(height: 30),
             DottedBorder(
               color: AppColors.textPrimary,
@@ -84,7 +83,7 @@ class HomePageView extends GetView<HomePageController> {
                 ),
               ),
             ),
-            const SizedBox(height: 24), // Jarak sebelum tombol
+            const SizedBox(height: 24),
             CustomSubmitButton(
               onPressed: () {
                 Get.toNamed(Routes.INPUT_PAGE);
