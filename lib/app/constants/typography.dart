@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 
 /// App typography
-/// This class contains all the text styles used in the application
 class AppTypography {
   // Font family
   static const String fontFamily = 'Poppins';

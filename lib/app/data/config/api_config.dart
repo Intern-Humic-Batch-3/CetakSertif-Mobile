@@ -1,5 +1,4 @@
 class ApiConfig {
-  // Ubah baseUrl dari localhost ke server yang sudah di-deploy
   static const String baseUrl = 'http://52.229.206.42:4001';
 
   // Endpoint untuk auth

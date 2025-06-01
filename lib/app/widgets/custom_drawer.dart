@@ -33,7 +33,7 @@ class CustomDrawer extends StatelessWidget {
             // **Logo**
             Center(
               child: Image.asset(
-                "assets/images/LogoHumic-Home.png",
+                "assets/images/Logo_Sidebar.png",
                 height: 50,
               ),
             ),
@@ -49,8 +49,7 @@ class CustomDrawer extends StatelessWidget {
               child: Column(
                 children: [
                   Obx(() => Text(
-                        userController.userName
-                            .value, // Menggunakan nilai dari controller
+                        userController.userName.value,
                         style: AppTypography.bodyLargeSemiBold.copyWith(
                           color: Colors.white,
                         ),
@@ -59,8 +58,7 @@ class CustomDrawer extends StatelessWidget {
                     height: 5,
                   ),
                   Obx(() => Text(
-                        userController.userEmail
-                            .value, // Menggunakan nilai dari controller
+                        userController.userEmail.value,
                         style: AppTypography.bodySmallRegular.copyWith(
                           color: Colors.white70,
                         ),
@@ -79,7 +77,7 @@ class CustomDrawer extends StatelessWidget {
                     onTap: () => Get.offAllNamed(Routes.ADMIN_PAGE),
                   ),
                   // Tambahkan menu Daftar Pengguna
-                  if (isAdmin) // Hanya tampilkan jika user adalah admin
+                  if (isAdmin)
                     _buildDrawerItem(
                       imagePath: "assets/icons/user-icon.png",
                       title: "Daftar Pengguna",
@@ -95,7 +93,6 @@ class CustomDrawer extends StatelessWidget {
             ),
 
             // **Logout Button**
-            // Pada bagian tombol logout:
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(

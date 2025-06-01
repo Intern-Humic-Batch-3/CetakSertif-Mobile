@@ -26,7 +26,6 @@ class UserController extends GetxController {
     String? token = prefs.getString('token');
 
     if (token == null) {
-      Get.snackbar("Error", "Token tidak ditemukan");
       isLoading.value = false;
       return;
     }

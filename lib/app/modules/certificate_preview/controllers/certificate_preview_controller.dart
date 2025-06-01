@@ -69,7 +69,6 @@ class CertificatePreviewController extends GetxController {
       final rows = excel.tables[sheet]?.rows;
 
       if (rows != null && rows.isNotEmpty) {
-        // Asumsikan kolom pertama adalah nama
         if (rows.length > 0 &&
             rows[0].isNotEmpty &&
             rows[0][0]?.value != null) {
@@ -121,18 +120,14 @@ class CertificatePreviewController extends GetxController {
 
       // Tambahkan nama dengan font Great Vibes
       final textStyle = ui.TextStyle(
-        color: categoryIndex.value == 1
-            ? Colors.red
-            : Colors.black, // Gunakan categoryIndex
+        color: categoryIndex.value == 1 ? Colors.red : Colors.black,
         fontSize: 100,
         fontWeight: FontWeight.normal,
         fontFamily: 'Great Vibes',
       );
 
       final paragraphStyle = ui.ParagraphStyle(
-        textAlign: categoryIndex.value == 1
-            ? TextAlign.left
-            : TextAlign.center, // Gunakan categoryIndex
+        textAlign: categoryIndex.value == 1 ? TextAlign.left : TextAlign.center,
         fontSize: 100,
         fontFamily: 'Great Vibes',
       );
@@ -150,7 +145,6 @@ class CertificatePreviewController extends GetxController {
       double y = 0;
 
       switch (categoryIndex.value) {
-        // Gunakan categoryIndex
         case 1:
           // Posisi untuk template merah-putih
           x = templateImage.width * 0.33;

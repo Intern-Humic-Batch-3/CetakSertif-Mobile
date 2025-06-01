@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 /// App color palette
-/// This class contains all the colors used in the application
 class AppColors {
   // Brand colors
   static const Color primary = Color(0xFFAD141A);

@@ -102,7 +102,6 @@ class InputPageView extends GetView<InputPageController> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  // Tampilkan dialog konfirmasi
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -137,7 +136,6 @@ class InputPageView extends GetView<InputPageController> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                // Tombol Batal
                                 SizedBox(
                                   width: 120,
                                   child: ElevatedButton(
@@ -157,7 +155,6 @@ class InputPageView extends GetView<InputPageController> {
                                     child: const Text('Batal'),
                                   ),
                                 ),
-                                // Tombol Tambah
                                 SizedBox(
                                   width: 120,
                                   child: ElevatedButton(

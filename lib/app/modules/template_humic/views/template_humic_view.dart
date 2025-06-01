@@ -166,7 +166,7 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
               children: [
                 Expanded(
                   child: Text(
-                    title, // Menggunakan nama template dari server
+                    title,
                     style: AppTypography.bodyMediumSemiBold.copyWith(
                       color: AppColors.primary,
                     ),

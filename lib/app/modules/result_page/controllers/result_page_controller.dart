@@ -31,7 +31,6 @@ class ResultPageController extends GetxController {
         if (args['categoryIndex'] is int) {
           categoryIndex.value = args['categoryIndex'] as int;
         } else {
-          // Jika bukan integer, coba konversi
           try {
             categoryIndex.value = int.parse(args['categoryIndex'].toString());
           } catch (e) {
@@ -69,7 +68,7 @@ class ResultPageController extends GetxController {
               name: name,
               templatePath: templatePath.value,
               templateIndex: templateIndex.value,
-              categoryIndex: categoryIndex.value, // Tambahkan ini
+              categoryIndex: categoryIndex.value,
             ));
           }
         }
@@ -122,28 +121,20 @@ class ResultPageController extends GetxController {
   Future<File> generateCertificate(String name) async {
     try {
       final ui.Image templateImage = await loadTemplateImage();
-
-      // Buat canvas untuk menggambar
       final recorder = ui.PictureRecorder();
       final canvas = Canvas(recorder);
 
-      // Gambar template
       canvas.drawImage(templateImage, Offset.zero, Paint());
 
-      // Tambahkan nama dengan font Great Vibes
       final textStyle = ui.TextStyle(
-        color: categoryIndex.value == 1
-            ? Colors.red
-            : Colors.black, // Gunakan categoryIndex
+        color: categoryIndex.value == 1 ? Colors.red : Colors.black,
         fontSize: 100,
         fontWeight: FontWeight.normal,
         fontFamily: 'Great Vibes',
       );
 
       final paragraphStyle = ui.ParagraphStyle(
-        textAlign: categoryIndex.value == 1
-            ? TextAlign.left
-            : TextAlign.center, // Gunakan categoryIndex
+        textAlign: categoryIndex.value == 1 ? TextAlign.left : TextAlign.center,
         fontSize: 100,
         fontFamily: 'Great Vibes',
       );
@@ -161,7 +152,6 @@ class ResultPageController extends GetxController {
       double y = 0;
 
       switch (categoryIndex.value) {
-        // Gunakan categoryIndex
         case 1:
           // Posisi untuk template merah-putih
           x = templateImage.width * 0.33;
@@ -240,8 +230,6 @@ class ResultPageController extends GetxController {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final fileName = '$name-certificate-$timestamp.png';
       final targetPath = '${directory.path}/$fileName';
-
-      // Salin file
       final savedFile = await tempFile.copy(targetPath);
 
       // Beri tahu galeri tentang file baru (hanya untuk Android)
@@ -253,7 +241,6 @@ class ResultPageController extends GetxController {
               .invokeMethod('scanFile', {'path': savedFile.path});
         } catch (e) {
           print("Error scanning file: $e");
-          // Lanjutkan meskipun gagal scan file
         }
       }
 

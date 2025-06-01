@@ -7,14 +7,14 @@ class CustomInputHeader extends StatelessWidget {
   final bool showBackButton;
   final VoidCallback? onBack;
   final VoidCallback? onInfoTap;
-  final String? backRoute; // Tambahkan parameter route tujuan
+  final String? backRoute;
 
   const CustomInputHeader({
     Key? key,
     this.showBackButton = false,
     this.onBack,
     this.onInfoTap,
-    this.backRoute, // Parameter route tujuan
+    this.backRoute,
   }) : super(key: key);
 
   @override
@@ -57,7 +57,6 @@ class CustomInputHeader extends StatelessWidget {
 void _showInfoDialog(BuildContext context) {
   showDialog(
     context: context,
-    // barrierColor: const Color.fromARGB(170, 0, 0, 0),
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: AppColors.putih,

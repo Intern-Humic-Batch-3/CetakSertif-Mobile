@@ -38,7 +38,7 @@ class LoginPageView extends GetView<LoginPageController> {
                           color: AppColors.putih, shape: BoxShape.circle),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Image.asset("assets/images/LogoHumic.png"),
+                        child: Image.asset("assets/images/Logo_Login.png"),
                       ),
                     ),
                     const SizedBox(height: 16),
