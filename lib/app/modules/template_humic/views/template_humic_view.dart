@@ -35,7 +35,7 @@ class TemplateHumicView extends GetView<TemplateHumicController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              const CustomInputHeader(showBackButton: true),
+              const CustomInputHeader(showBackButton: false),
               const SizedBox(height: 30),
 
               // Judul untuk Template Custom

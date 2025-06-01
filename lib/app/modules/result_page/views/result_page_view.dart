@@ -31,12 +31,18 @@ class ResultPageView extends GetView<ResultPageController> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Get.back(),
+                  // Posisi icon tetap di kiri
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () => Get.back(),
+                    ),
                   ),
+                  // Teks di tengah
                   Text(
                     'Preview Sertifikat',
                     style: AppTypography.bodyLargeBold,
